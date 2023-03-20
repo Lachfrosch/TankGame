@@ -802,18 +802,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 486559928}
-        m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
-        m_MethodName: SetMenu
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &164392492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,7 +942,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 173640710}
+      - m_Target: {fileID: 411202406}
         m_TargetAssemblyTypeName: CreateLobbyHandler, Assembly-CSharp
         m_MethodName: CreateLobby
         m_Mode: 1
@@ -962,18 +950,6 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 486559928}
-        m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
-        m_MethodName: SetMenu
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1909,8 +1885,12 @@ GameObject:
   m_Component:
   - component: {fileID: 411202402}
   - component: {fileID: 411202401}
+  - component: {fileID: 411202405}
+  - component: {fileID: 411202404}
+  - component: {fileID: 411202403}
+  - component: {fileID: 411202406}
   m_Layer: 0
-  m_Name: Lobby
+  m_Name: LobbyController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1928,6 +1908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a4e38f29c5da642a24239a1de9c97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuHandler: {fileID: 486559928}
 --- !u!4 &411202402
 Transform:
   m_ObjectHideFlags: 0
@@ -1943,6 +1924,70 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &411202403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411202400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47fc18a396dd4f54ea20caed05531216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 733140214808637872, guid: 594f771ecbea7154fa707506b92f4a8a, type: 3}
+  entryContainer: {fileID: 1276912734}
+  lobbyCode: {fileID: 1964389952}
+  lobbyController: {fileID: 411202401}
+--- !u!114 &411202404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411202400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9650a621aef657b4ab6a3d0ced750faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JoinCode: {fileID: 1155902824}
+  _LobbyController: {fileID: 411202401}
+  _MenuHandler: {fileID: 486559928}
+--- !u!114 &411202405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411202400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce34fbb5e16f7c04a9381298642cf744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entryPrefab: {fileID: 8545238154821309573, guid: 6b26695bc0e03d64caf38a84071f20d3, type: 3}
+  entryContainer: {fileID: 1989193917}
+  lobbyController: {fileID: 411202401}
+  menuHandler: {fileID: 486559928}
+--- !u!114 &411202406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411202400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e3ca3455e8178f43bade1baeacab2c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lobbyController: {fileID: 411202401}
+  lobbyName: {fileID: 1875755727}
+  maxPlayers: {fileID: 1946296301}
+  gameMode: {fileID: 1285611814}
+  isPrivate: {fileID: 2004527895}
 --- !u!1 &456261478
 GameObject:
   m_ObjectHideFlags: 0
@@ -2151,7 +2196,6 @@ GameObject:
   - component: {fileID: 462732515}
   - component: {fileID: 462732514}
   - component: {fileID: 462732513}
-  - component: {fileID: 462732512}
   m_Layer: 5
   m_Name: ButtonRefresh
   m_TagString: Untagged
@@ -2180,22 +2224,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1160, y: -225}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &462732512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 462732509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce34fbb5e16f7c04a9381298642cf744, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entryPrefab: {fileID: 8545238154821309573, guid: 6b26695bc0e03d64caf38a84071f20d3, type: 3}
-  entryContainer: {fileID: 1989193917}
-  lobbyController: {fileID: 411202401}
-  menuHandler: {fileID: 486559928}
 --- !u!114 &462732513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2240,7 +2268,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 462732512}
+      - m_Target: {fileID: 411202405}
         m_TargetAssemblyTypeName: GetLobbyListHandler, Assembly-CSharp
         m_MethodName: GetLobbyList
         m_Mode: 1
@@ -4677,7 +4705,6 @@ GameObject:
   - component: {fileID: 1001090533}
   - component: {fileID: 1001090532}
   - component: {fileID: 1001090531}
-  - component: {fileID: 1001090530}
   m_Layer: 5
   m_Name: JoinByCode
   m_TagString: Untagged
@@ -4706,21 +4733,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1110, y: -750.00006}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1001090530
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1001090528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9650a621aef657b4ab6a3d0ced750faa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  JoinCode: {fileID: 1155902824}
-  _LobbyController: {fileID: 411202401}
-  _MenuHandler: {fileID: 486559928}
 --- !u!114 &1001090531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4765,7 +4777,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1001090530}
+      - m_Target: {fileID: 411202404}
         m_TargetAssemblyTypeName: JoinByCodeHandler, Assembly-CSharp
         m_MethodName: JoinClicked
         m_Mode: 1
@@ -7198,7 +7210,6 @@ GameObject:
   - component: {fileID: 1775667829}
   - component: {fileID: 1775667828}
   - component: {fileID: 1775667827}
-  - component: {fileID: 1775667826}
   m_Layer: 5
   m_Name: ButtonRefresh
   m_TagString: Untagged
@@ -7227,22 +7238,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1060, y: -200}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1775667826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775667823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47fc18a396dd4f54ea20caed05531216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 733140214808637872, guid: 594f771ecbea7154fa707506b92f4a8a, type: 3}
-  entryContainer: {fileID: 1276912734}
-  lobbyCode: {fileID: 1964389952}
-  lobbyController: {fileID: 411202401}
 --- !u!114 &1775667827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7302,7 +7297,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1775667826}
+      - m_Target: {fileID: 411202403}
         m_TargetAssemblyTypeName: GetLobbyHandler, Assembly-CSharp
         m_MethodName: RefreshLobby
         m_Mode: 1
