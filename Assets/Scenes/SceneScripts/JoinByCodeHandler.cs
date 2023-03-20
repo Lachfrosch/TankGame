@@ -12,6 +12,5 @@ public class JoinByCodeHandler : MonoBehaviour
     public void JoinClicked()
     {
         _LobbyController.JoinLobbyByCode(JoinCode.text);
-        _MenuHandler.SetMenu(2);
     }
 }

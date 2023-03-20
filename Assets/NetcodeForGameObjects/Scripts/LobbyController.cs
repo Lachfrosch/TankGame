@@ -14,6 +14,7 @@ public class LobbyController : MonoBehaviour
 {
     private Lobby _hostLobby;
     private Lobby _joinedLobby;
+    public MenuHandler menuHandler;
 
     private float heartbeatTimer;
     private float heartbeatTimerMax = 15f;
@@ -69,6 +70,10 @@ public class LobbyController : MonoBehaviour
 
                 var temp = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
                 _joinedLobby = temp;
+                if (_joinedLobby == null)
+                {
+                    menuHandler.SetMenu(1);
+                }
             }
         }
     }
@@ -89,6 +94,7 @@ public class LobbyController : MonoBehaviour
 
             _hostLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             _joinedLobby = _hostLobby;
+            menuHandler.SetMenu(2);
             Debug.Log("Created Lobby! " + _hostLobby.Name + " " + _hostLobby.MaxPlayers);
         }
         catch (LobbyServiceException e)
@@ -125,6 +131,7 @@ public class LobbyController : MonoBehaviour
                 Player = GetPlayer()
             };
             _joinedLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
+            menuHandler.SetMenu(2);
         }
         catch (LobbyServiceException e)
         {
@@ -140,7 +147,8 @@ public class LobbyController : MonoBehaviour
             {
                 Player = GetPlayer()
             };
-            _joinedLobby =  await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
+            _joinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
+            menuHandler.SetMenu(2);
         }
         catch (LobbyServiceException e)
         {
@@ -153,6 +161,7 @@ public class LobbyController : MonoBehaviour
         try
         {
             await LobbyService.Instance.RemovePlayerAsync(_joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+            menuHandler.SetMenu(1);
         }
         catch (LobbyServiceException e)
         {
@@ -177,6 +186,7 @@ public class LobbyController : MonoBehaviour
         try
         {
             await LobbyService.Instance.QuickJoinLobbyAsync();
+            menuHandler.SetMenu(2);
         }
         catch (LobbyServiceException e)
         {
@@ -184,13 +194,6 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    public void GetPlayers(Lobby lobby)
-    {
-        foreach (var player in lobby.Players)
-        {
-
-        }
-    }
     private Player GetPlayer()
     {
         return new Player
