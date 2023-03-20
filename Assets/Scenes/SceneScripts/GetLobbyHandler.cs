@@ -13,15 +13,18 @@ public class GetLobbyHandler : MonoBehaviour
     public TMP_Text lobbyCode;
     public LobbyController lobbyController;
 
-    public async void RefreshLobby()
+    public void RefreshLobby()
     {
         try
         {
-            var currentLobbyID = await LobbyService.Instance.GetJoinedLobbiesAsync();
-            if (currentLobbyID.Count > 0)
+            var lobby = lobbyController.GetCurrentLobby();
+            if (lobby != null)
             {
-                var lobby = await LobbyService.Instance.GetLobbyAsync(currentLobbyID.First());
-                lobbyCode.text = lobby.LobbyCode;
+                if (lobby.LobbyCode != "")
+                {
+
+                    lobbyCode.text = lobby.LobbyCode;
+                }
 
                 //Clear existing List
                 foreach (Transform child in entryContainer.transform)
@@ -43,8 +46,6 @@ public class GetLobbyHandler : MonoBehaviour
                     entry.transform.SetParent(entryContainer.transform, false);
                 }
             }
-
-
         }
         catch (LobbyServiceException e)
         {

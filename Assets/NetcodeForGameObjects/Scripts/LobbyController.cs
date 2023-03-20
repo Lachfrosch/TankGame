@@ -8,6 +8,7 @@ using Unity.Services.Lobbies;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using TMPro;
 
 public class LobbyController : MonoBehaviour
 {
@@ -87,7 +88,7 @@ public class LobbyController : MonoBehaviour
             };
 
             _hostLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
-
+            _joinedLobby = _hostLobby;
             Debug.Log("Created Lobby! " + _hostLobby.Name + " " + _hostLobby.MaxPlayers);
         }
         catch (LobbyServiceException e)
@@ -123,7 +124,7 @@ public class LobbyController : MonoBehaviour
             {
                 Player = GetPlayer()
             };
-            await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
+            _joinedLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
         }
         catch (LobbyServiceException e)
         {
@@ -139,7 +140,7 @@ public class LobbyController : MonoBehaviour
             {
                 Player = GetPlayer()
             };
-            await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
+            _joinedLobby =  await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
         }
         catch (LobbyServiceException e)
         {
@@ -198,5 +199,10 @@ public class LobbyController : MonoBehaviour
                 { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) }
             }
         };
+    }
+
+    public Lobby GetCurrentLobby()
+    {
+        return _joinedLobby;
     }
 }
