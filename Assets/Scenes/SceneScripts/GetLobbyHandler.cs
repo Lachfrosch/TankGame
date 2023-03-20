@@ -29,7 +29,6 @@ public class GetLobbyHandler : MonoBehaviour
                     GameObject.Destroy(child.gameObject);
                 }
 
-                //TODO
                 for (int i = 0; i < lobby.Players.Count; i++)
                 {
                     Player player = lobby.Players[i];
