@@ -6,6 +6,8 @@ using UnityEngine;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
 using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 public class LobbyController : MonoBehaviour
 {
@@ -65,11 +67,16 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    private async void CreateLobby(string lobbyName, int maxPlayers)
+    public async void CreateLobby(string lobbyName, int maxPlayers, string gameMode, bool isPrivate)
     {
         try
         {
-            _hostLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers);
+            CreateLobbyOptions options = new CreateLobbyOptions
+            {
+                IsPrivate = isPrivate
+            };
+
+            _hostLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 
             Debug.Log("Created Lobby! " + _hostLobby.Name + " " + _hostLobby.MaxPlayers);
         }
@@ -79,7 +86,7 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    private async void ListLobbies()
+    public async Task<List<Lobby>> ListLobbies()
     {
         try
         {
@@ -89,18 +96,20 @@ public class LobbyController : MonoBehaviour
             {
                 Debug.Log(lobby.Name + ": " + lobby.MaxPlayers);
             }
+            return  response.Results;
         }
         catch (LobbyServiceException e)
         {
             Debug.LogError(e);
         }
+        return null;
     }
 
-    private async void JoinLobbyByCode(string lobbyCode)
+    public async void JoinLobbyById(string lobbyId)
     {
         try
         {
-            await Lobbies.Instance.JoinLobbyByIdAsync(lobbyCode);
+            await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
         }
         catch (LobbyServiceException e)
         {
@@ -108,7 +117,19 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    private async void LeaveLobby()
+    public async void JoinLobbyByCode(string lobbyCode)
+    {
+        try
+        {
+            await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError(e);
+        }
+    }
+
+    public async void LeaveLobby()
     {
         try
         {
@@ -120,7 +141,7 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    private async void KickPlayer(string playerID)
+    public async void KickPlayer(string playerID)
     {
         try
         {
@@ -129,6 +150,26 @@ public class LobbyController : MonoBehaviour
         catch (LobbyServiceException e)
         {
             Debug.LogError(e);
+        }
+    }
+
+    public async void QuickJoinLobby()
+    {
+        try
+        {
+            await LobbyService.Instance.QuickJoinLobbyAsync();
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError(e);
+        }
+    }
+
+    public void GetPlayers(Lobby lobby)
+    {
+        foreach (var player in lobby.Players)
+        {
+
         }
     }
 }
