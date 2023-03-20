@@ -7227,9 +7227,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fc18a396dd4f54ea20caed05531216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entryPrefab: {fileID: 733140214808637872, guid: 594f771ecbea7154fa707506b92f4a8a, type: 3}
+  playerPrefab: {fileID: 733140214808637872, guid: 594f771ecbea7154fa707506b92f4a8a, type: 3}
   entryContainer: {fileID: 1276912734}
-  lobbyCode: {fileID: 0}
+  lobbyCode: {fileID: 1964389952}
   lobbyController: {fileID: 411202401}
 --- !u!114 &1775667827
 MonoBehaviour:

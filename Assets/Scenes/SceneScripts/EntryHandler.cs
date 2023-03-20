@@ -14,7 +14,7 @@ public class EntryHandler : MonoBehaviour
     private int _CurrentPlayers;
     private int _MaxPlayers;
 
-    public void InitializeEntry (MenuHandler menuHandler, LobbyController lobbycontroller, string lobbyName, string lobbyId, int currentPlayers, int maxPlayers)
+    public void InitializeEntry (MenuHandler menuHandler, LobbyController lobbycontroller, string lobbyName, string lobbyId, int currentPlayers, int maxPlayers, string gameMode)
     {
         _MenuHandler = menuHandler;
         _LobbyController = lobbycontroller;
@@ -24,7 +24,7 @@ public class EntryHandler : MonoBehaviour
         _MaxPlayers = maxPlayers;
         LobbyName.text = _LobbyName;
         Players.text = _CurrentPlayers + "/" + _MaxPlayers;
-        //GameMode.text = gameMode;
+        GameMode.text = gameMode;
     }
     public void EntryClicked()
     {

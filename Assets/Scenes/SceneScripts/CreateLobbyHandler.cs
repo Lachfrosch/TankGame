@@ -12,6 +12,6 @@ public class CreateLobbyHandler : MonoBehaviour
     public Toggle isPrivate;
     public void CreateLobby()
     {
-        lobbyController.CreateLobby(lobbyName.text, Convert.ToInt32(maxPlayers.text), gameMode.options[gameMode.value].text, isPrivate.enabled);
+        lobbyController.CreateLobby(lobbyName.text, Convert.ToInt32(maxPlayers.text), gameMode.options[gameMode.value].text, isPrivate.isOn);
     }
 }

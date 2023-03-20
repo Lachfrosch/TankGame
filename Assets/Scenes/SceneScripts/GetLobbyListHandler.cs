@@ -34,7 +34,7 @@ public class GetLobbyListHandler : MonoBehaviour
             var entry = Instantiate(entryPrefab, new Vector3(0, i * -75, 0), transform.rotation); //(i * -75) is for vertical spacing
 
             //Set values
-            entry.GetComponent<EntryHandler>().InitializeEntry(menuHandler, lobbyController, lobby.Name, lobby.Id, lobby.Players.Count, lobby.MaxPlayers);
+            entry.GetComponent<EntryHandler>().InitializeEntry(menuHandler, lobbyController, lobby.Name, lobby.Id, lobby.Players.Count, lobby.MaxPlayers, lobby.Data["GameMode"].Value);
 
             //Add to Container
             entry.transform.SetParent(entryContainer.transform, false);

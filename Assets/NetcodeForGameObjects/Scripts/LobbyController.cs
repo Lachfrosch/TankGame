@@ -18,6 +18,7 @@ public class LobbyController : MonoBehaviour
     private float heartbeatTimerMax = 15f;
     private float lobbyUpdateTimer;
     private float lobbyUpdateTimerMax = 1.1f;
+    private string playerName;
 
     // Start is called before the first frame update
     async void Start()
@@ -30,6 +31,8 @@ public class LobbyController : MonoBehaviour
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        playerName = "Player" + UnityEngine.Random.Range(0, 100);
     }
 
     // Update is called once per frame
@@ -41,9 +44,11 @@ public class LobbyController : MonoBehaviour
 
     private async void HandleLobbyheartbeat()
     {
-        if (_hostLobby != null) {
+        if (_hostLobby != null)
+        {
             heartbeatTimer -= Time.deltaTime;
-            if (heartbeatTimer <= 0f) {
+            if (heartbeatTimer <= 0f)
+            {
                 heartbeatTimer = heartbeatTimerMax;
 
                 await LobbyService.Instance.SendHeartbeatPingAsync(_hostLobby.Id);
@@ -73,7 +78,12 @@ public class LobbyController : MonoBehaviour
         {
             CreateLobbyOptions options = new CreateLobbyOptions
             {
-                IsPrivate = isPrivate
+                IsPrivate = isPrivate,
+                Player = GetPlayer(),
+                Data = new Dictionary<string, DataObject>
+                {
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, gameMode)}
+                }
             };
 
             _hostLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
@@ -96,7 +106,7 @@ public class LobbyController : MonoBehaviour
             {
                 Debug.Log(lobby.Name + ": " + lobby.MaxPlayers);
             }
-            return  response.Results;
+            return response.Results;
         }
         catch (LobbyServiceException e)
         {
@@ -109,7 +119,11 @@ public class LobbyController : MonoBehaviour
     {
         try
         {
-            await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
+            JoinLobbyByIdOptions options = new JoinLobbyByIdOptions
+            {
+                Player = GetPlayer()
+            };
+            await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
         }
         catch (LobbyServiceException e)
         {
@@ -121,7 +135,11 @@ public class LobbyController : MonoBehaviour
     {
         try
         {
-            await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
+            JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions
+            {
+                Player = GetPlayer()
+            };
+            await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
         }
         catch (LobbyServiceException e)
         {
@@ -171,5 +189,14 @@ public class LobbyController : MonoBehaviour
         {
 
         }
+    }
+    private Player GetPlayer()
+    {
+        return new Player
+        {
+            Data = new Dictionary<string, PlayerDataObject>{
+                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) }
+            }
+        };
     }
 }
