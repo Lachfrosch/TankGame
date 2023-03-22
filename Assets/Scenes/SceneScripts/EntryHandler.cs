@@ -14,7 +14,7 @@ public class EntryHandler : MonoBehaviour
     private int _CurrentPlayers;
     private int _MaxPlayers;
 
-    public void InitializeEntry (MenuHandler menuHandler, LobbyController lobbycontroller, string lobbyName, string lobbyId, int currentPlayers, int maxPlayers, string gameMode)
+    public void UpdateEntry(MenuHandler menuHandler, LobbyController lobbycontroller, string lobbyName, string lobbyId, int currentPlayers, int maxPlayers, string gameMode)
     {
         _MenuHandler = menuHandler;
         _LobbyController = lobbycontroller;

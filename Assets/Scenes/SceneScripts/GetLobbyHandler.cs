@@ -5,13 +5,21 @@ using TMPro;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class GetLobbyHandler : MonoBehaviour
 {
     public GameObject playerPrefab;
     public GameObject entryContainer;
+    public GameObject HeaderRow;
     public TMP_Text lobbyCode;
     public LobbyController lobbyController;
+
+    public void Start()
+    {
+        lobbyController.updateLobbyUI += RefreshLobby;
+    }
+
 
     public void RefreshLobby()
     {
@@ -22,9 +30,10 @@ public class GetLobbyHandler : MonoBehaviour
             {
                 if (lobby.LobbyCode != "")
                 {
-
                     lobbyCode.text = lobby.LobbyCode;
                 }
+
+                HeaderRow.GetComponent<HeaderHandler>().UpdateEntry(lobby.Name, lobby.Players.Count, lobby.MaxPlayers, lobby.Data["GameMode"].Value);
 
                 //Clear existing List
                 foreach (Transform child in entryContainer.transform)

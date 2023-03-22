@@ -22,6 +22,9 @@ public class LobbyController : MonoBehaviour
     private Lobby _joinedLobby;
     public MenuHandler menuHandler;
 
+    public delegate void UpdateLobbyUI();
+    public event UpdateLobbyUI updateLobbyUI;
+
     private float heartbeatTimer;
     private float heartbeatTimerMax = 15f;
     private float lobbyUpdateTimer;
@@ -76,10 +79,15 @@ public class LobbyController : MonoBehaviour
 
                 _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
 
+
                 if (!IsPlayerInLobby())
                 {
                     _joinedLobby = null;
                     menuHandler.SetMenu(1);
+                }
+                else
+                {
+                    updateLobbyUI?.Invoke();
                 }
 
                 if (_joinedLobby == null)
