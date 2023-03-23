@@ -162,7 +162,11 @@ namespace StarterAssets
             {
                 _playerInput = GetComponent<PlayerInput>();
                 _playerInput.enabled = true;
+                //_mainCamera.SetActive(true);
                 _cinemachineVirtualCamera.Follow = transform.GetChild(0);
+                //_cinemachineVirtualCamera.Priority = 100;
+                FindObjectOfType<Canvas>().enabled = false;
+                _cinemachineVirtualCamera.enabled = true;
             }
         }
 

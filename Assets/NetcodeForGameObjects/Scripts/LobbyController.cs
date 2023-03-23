@@ -241,17 +241,19 @@ public class LobbyController : MonoBehaviour
         return _joinedLobby;
     }
 
-    public async void CreateRelay(int maxPlayers)
+    public async void CreateRelay()
     {
         try
         {
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers - 1);
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(_hostLobby.MaxPlayers - 1);
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            NetworkManager.Singleton.StartHost();
         }
         catch (RelayServiceException e)
         {
@@ -268,6 +270,8 @@ public class LobbyController : MonoBehaviour
             RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            NetworkManager.Singleton.StartClient();
         }
         catch (RelayServiceException e)
         {
