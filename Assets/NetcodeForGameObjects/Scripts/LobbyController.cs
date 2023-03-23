@@ -5,10 +5,7 @@ using Unity.Services.Authentication;
 using UnityEngine;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
-using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using TMPro;
 using System.Linq;
 using Unity.Services.Relay.Models;
 using Unity.Services.Relay;
@@ -16,11 +13,13 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
 
+
 public class LobbyController : MonoBehaviour
 {
     private Lobby _hostLobby;
     private Lobby _joinedLobby;
     public MenuHandler menuHandler;
+    private bool _InGame;
 
     public delegate void UpdateLobbyUI();
     public event UpdateLobbyUI updateLobbyUI;
@@ -82,12 +81,19 @@ public class LobbyController : MonoBehaviour
 
                 if (!IsPlayerInLobby())
                 {
+                    //Player got Kicked
                     _joinedLobby = null;
                     menuHandler.SetMenu(1);
                 }
                 else
                 {
+                    if (!_InGame && _joinedLobby.Data["InGame"].Value == "true")
+                    {
+                        //If Player is not InGame but Lobby is --> We have to join the Relay
+                        JoinRelay(_joinedLobby.Data["RelayCode"].Value);
+                    }
                     updateLobbyUI?.Invoke();
+
                 }
 
                 if (_joinedLobby == null)
@@ -117,7 +123,9 @@ public class LobbyController : MonoBehaviour
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>
                 {
-                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, gameMode)}
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, gameMode)},
+                    {"InGame", new DataObject(DataObject.VisibilityOptions.Public, "false")},
+                    {"RelayCode", new DataObject(DataObject.VisibilityOptions.Public, "") }
                 }
             };
 
@@ -254,6 +262,19 @@ public class LobbyController : MonoBehaviour
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartHost();
+
+            _hostLobby = await Lobbies.Instance.UpdateLobbyAsync(_joinedLobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>
+                {
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, _hostLobby.Data["GameMode"].Value)},
+                    {"InGame", new DataObject(DataObject.VisibilityOptions.Public, "true")},
+                    {"RelayCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
+                }
+            });
+            _InGame = true;
+
+            _joinedLobby = _hostLobby;
         }
         catch (RelayServiceException e)
         {
