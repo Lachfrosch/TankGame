@@ -263,13 +263,13 @@ public class LobbyController : MonoBehaviour
 
             NetworkManager.Singleton.StartHost();
 
-            _hostLobby = await Lobbies.Instance.UpdateLobbyAsync(_joinedLobby.Id, new UpdateLobbyOptions
+            _hostLobby = await Lobbies.Instance.UpdateLobbyAsync(_hostLobby.Id, new UpdateLobbyOptions
             {
                 Data = new Dictionary<string, DataObject>
                 {
                     {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, _hostLobby.Data["GameMode"].Value)},
                     {"InGame", new DataObject(DataObject.VisibilityOptions.Public, "true")},
-                    {"RelayCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
+                    {"RelayCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode)}
                 }
             });
             _InGame = true;
