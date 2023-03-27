@@ -107,7 +107,11 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+
         private CinemachineVirtualCamera _cinemachineVirtualCamera;
+        public float zoomMaxDistance = 30f;
+        public float zoomMinDistance = 10f;
+        public float zoomSpeed = 0.02f;
 
         private const float _threshold = 0.01f;
 
@@ -183,6 +187,7 @@ namespace StarterAssets
         private void LateUpdate()
         {
             CameraRotation();
+            CameraZoom();
         }
 
         private void AssignAnimationIDs()
@@ -206,6 +211,19 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
+            }
+        }
+
+        private void CameraZoom()
+        {
+            var currentDistance = _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance;
+            if (currentDistance > zoomMinDistance && _input.zoom > 0)
+            {
+                _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance--;
+            }
+            else if (currentDistance < zoomMaxDistance && _input.zoom < 0)
+            {
+                _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance++;
             }
         }
 

@@ -125,7 +125,7 @@ public class LobbyController : MonoBehaviour
                 {
                     {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, gameMode)},
                     {"InGame", new DataObject(DataObject.VisibilityOptions.Public, "false")},
-                    {"RelayCode", new DataObject(DataObject.VisibilityOptions.Public, "") }
+                    {"RelayCode", new DataObject(DataObject.VisibilityOptions.Member, "") }
                 }
             };
 

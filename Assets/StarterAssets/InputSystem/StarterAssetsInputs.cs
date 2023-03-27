@@ -16,7 +16,10 @@ namespace StarterAssets
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
-		[Header("Mouse Cursor Settings")]
+        [Header("Camera Settings")]
+        public float zoom;
+
+        [Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
@@ -43,6 +46,11 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
+		public void OnZoom(InputValue value)
+		{
+			ZoomInput(value.Get<float>());
+		}
 #endif
 
 
@@ -66,7 +74,12 @@ namespace StarterAssets
 			sprint = newSprintState;
 		}
 
-		private void OnApplicationFocus(bool hasFocus)
+        public void ZoomInput(float newZoomState)
+        {
+            zoom = newZoomState;
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
 		}
