@@ -318,7 +318,15 @@ namespace StarterAssets
 
 
             //Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-            Vector3 targetDirection = transform.forward;
+            Vector3 targetDirection = Vector3.zero;
+            if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+            {
+                targetDirection = transform.forward;
+            }
+            else if (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+            {
+                targetDirection = transform.forward * -1;
+            }
 
             // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
