@@ -109,8 +109,8 @@ namespace StarterAssets
         private GameObject _mainCamera;
 
         private CinemachineVirtualCamera _cinemachineVirtualCamera;
-        public float zoomMaxDistance = 30f;
-        public float zoomMinDistance = 10f;
+        public float zoomMaxDistance = 80f; //30
+        public float zoomMinDistance = 50f; //10
         public float zoomSpeed = 0.02f;
 
         private const float _threshold = 0.01f;
@@ -296,11 +296,11 @@ namespace StarterAssets
             {
                 if (Input.GetKey(KeyCode.A))
                 {
-                    transform.Rotate(0f, -1, 0);
+                    transform.Rotate(0f, -0.2f, 0);
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
-                    transform.Rotate(0f, +1, 0);
+                    transform.Rotate(0f, +0.2f, 0);
                 }
             }
 
