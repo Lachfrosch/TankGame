@@ -296,11 +296,11 @@ namespace StarterAssets
             {
                 if (Input.GetKey(KeyCode.A))
                 {
-                    transform.Rotate(0f, -0.2f, 0);
+                    transform.Rotate(0f, -0.5f, 0);
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
-                    transform.Rotate(0f, +0.2f, 0);
+                    transform.Rotate(0f, +0.5f, 0);
                 }
             }
 
