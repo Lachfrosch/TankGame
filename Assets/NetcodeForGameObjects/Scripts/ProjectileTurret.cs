@@ -1,10 +1,11 @@
 using Unity.Netcode;
 using TMPro;
 using UnityEngine;
-using Cinemachine;
+using System;
 
 public class ProjectileTurret : NetworkBehaviour
 {
+    
     //Bullet
     public GameObject bullet;
 
@@ -48,6 +49,8 @@ public class ProjectileTurret : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         MyInput();
 
         //Set AmmoDisplay, if it exists
@@ -105,24 +108,7 @@ public class ProjectileTurret : NetworkBehaviour
             targetPoint = bulletPath.GetPoint(100); //Just pick a Point 100 Units away;
         }
 
-        //Calculate Direction
-        Vector3 directionOfBullet = targetPoint - attackPoint.position;
-
-        //Calculate BulletSpread
-        float x = Random.Range(-spread, +spread);
-        float y = Random.Range(-spread, +spread);
-
-        //Add Bulletspread
-        Vector3 directionOfBulletWithSpread = directionOfBullet + new Vector3(x, y, 0);
-
-        //Create Bullet
-        GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
-
-        //Rotate it properly
-        currentBullet.transform.forward = directionOfBulletWithSpread.normalized;
-
-        //Add Force to Bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionOfBulletWithSpread.normalized * shootForce, ForceMode.Impulse);
+        SpawnBulletServerRpc(targetPoint, attackPoint.position, Quaternion.identity);
 
         //Create MuzzleFlash if it exists
         if (muzzleFlash != null)
@@ -163,5 +149,29 @@ public class ProjectileTurret : NetworkBehaviour
     {
         bulletsLeft = magazineSize;
         IsReloading = false;
+    }
+
+    [ServerRpc]
+    private void SpawnBulletServerRpc(Vector3 targetPoint, Vector3 position, Quaternion rotation)
+    {
+        //Calculate Direction
+        Vector3 directionOfBullet = targetPoint - position;
+
+        //Calculate BulletSpread
+        float x = UnityEngine.Random.Range(-spread, +spread);
+        float y = UnityEngine.Random.Range(-spread, +spread);
+
+        //Add Bulletspread
+        Vector3 directionOfBulletWithSpread = directionOfBullet + new Vector3(x, y, 0);
+
+        //Create Bullet
+        GameObject currentBullet = Instantiate(bullet, position, rotation);
+        currentBullet.GetComponent<NetworkObject>().Spawn();
+
+        //Rotate it properly
+        currentBullet.transform.forward = directionOfBulletWithSpread.normalized;
+
+        //Add Force to Bullet
+        currentBullet.GetComponent<Rigidbody>().AddForce(directionOfBulletWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
 }
