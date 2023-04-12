@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888763586510750943}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.22, y: -0, z: 0}
+  m_LocalPosition: {x: 0.3, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -411,14 +411,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 3122073519443132866, guid: 6896c211f55f73c4981f8fdc969a0e4d, type: 3}
-  shootForce: 300
-  timeBetweenShoooting: 0.1
-  spread: 3
+  shootForce: 200
+  timeBetweenShoooting: 1
+  spread: 1
   reloadTime: 2
-  timeBetweenShots: 0
-  magazineSize: 100
+  timeBetweenShots: 1
+  magazineSize: 1
   bulletsPerTap: 1
-  allowButtonHold: 1
+  allowButtonHold: 0
   allowInvoke: 1
   myCamera: {fileID: 0}
   attackPoint: {fileID: 7142266212987775729}

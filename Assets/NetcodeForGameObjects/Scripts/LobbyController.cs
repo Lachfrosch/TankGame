@@ -259,9 +259,13 @@ public class LobbyController : MonoBehaviour
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
+            NetworkManager.Singleton.LogLevel = LogLevel.Developer;
+
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartHost();
+
+            _InGame = true;
 
             _hostLobby = await Lobbies.Instance.UpdateLobbyAsync(_hostLobby.Id, new UpdateLobbyOptions
             {
@@ -272,7 +276,6 @@ public class LobbyController : MonoBehaviour
                     {"RelayCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode)}
                 }
             });
-            _InGame = true;
 
             _joinedLobby = _hostLobby;
         }
@@ -293,10 +296,12 @@ public class LobbyController : MonoBehaviour
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartClient();
+            _InGame = true;
         }
         catch (RelayServiceException e)
         {
             Debug.LogError(e);
+            Debug.Log(joinCode);
         }
     }
 }
