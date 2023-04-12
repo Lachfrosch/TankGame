@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class BulletCollision : MonoBehaviour
+public class BulletCollision : NetworkBehaviour
 {
     //Graphics
     public GameObject hitExplosion;
@@ -10,23 +9,31 @@ public class BulletCollision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        CreateExplosionAndDespawnServerRpc(collision.contacts[0].point);
+    }
+
+    [ServerRpc]
+    private void CreateExplosionAndDespawnServerRpc(Vector3 location)
+    {
         //Create MuzzleFlash if it exists
         if (hitExplosion != null)
         {
-            var currentMuzzleFlash = Instantiate(hitExplosion, collision.contacts[0].point, Quaternion.identity);
+            GameObject currentMuzzleFlash = Instantiate(hitExplosion, location, Quaternion.identity);
             currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
+            currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
+        gameObject.GetComponent<NetworkObject>().Despawn();
         Destroy(gameObject);
     }
 }

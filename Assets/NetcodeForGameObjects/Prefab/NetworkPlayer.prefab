@@ -412,13 +412,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 3122073519443132866, guid: 6896c211f55f73c4981f8fdc969a0e4d, type: 3}
   shootForce: 200
-  timeBetweenShoooting: 1
+  timeBetweenShoooting: 0.2
   spread: 1
-  reloadTime: 2
-  timeBetweenShots: 1
-  magazineSize: 1
+  reloadTime: 1
+  timeBetweenShots: 0.1
+  magazineSize: 10
   bulletsPerTap: 1
-  allowButtonHold: 0
+  allowButtonHold: 1
   allowInvoke: 1
   myCamera: {fileID: 0}
   attackPoint: {fileID: 7142266212987775729}

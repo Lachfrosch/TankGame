@@ -95,11 +95,10 @@ public class ProjectileTurret : NetworkBehaviour
     {
         readyToShoot = false;
         Ray bulletPath = myCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
 
         //Chek if bullet hits something in its Path;
         Vector3 targetPoint;
-        if (Physics.Raycast(bulletPath, out hit))
+        if (Physics.Raycast(bulletPath, out RaycastHit hit))
         {
             targetPoint = hit.point;
         }
@@ -110,27 +109,20 @@ public class ProjectileTurret : NetworkBehaviour
 
         SpawnBulletServerRpc(targetPoint, attackPoint.position, Quaternion.identity);
 
-        //Create MuzzleFlash if it exists
-        if (muzzleFlash != null)
-        {
-            var currentMuzzleFlash = Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
-            currentMuzzleFlash.transform.localScale= new Vector3(3, 3, 3);
-        }
-
         bulletsLeft--;
         bulletsShot++;
 
         //Invoke ResetShot for a Cooldown between shots;
         if (allowInvoke)
         {
-            Invoke("ResetShot", timeBetweenShoooting);
+            Invoke(nameof(ResetShot), timeBetweenShoooting);
             allowInvoke = false;
         }
 
         //If more than one bullet is fired per Tap repeat function
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
         {
-            Invoke("Shoot", timeBetweenShots);
+            Invoke(nameof(Shoot), timeBetweenShots);
         }
     }
 
@@ -143,7 +135,7 @@ public class ProjectileTurret : NetworkBehaviour
     private void Reload()
     {
         IsReloading = true;
-        Invoke("ReloadFinished", reloadTime);
+        Invoke(nameof(ReloadFinished), reloadTime);
     }
 
     private void ReloadFinished()
@@ -155,24 +147,39 @@ public class ProjectileTurret : NetworkBehaviour
     [ServerRpc]
     private void SpawnBulletServerRpc(Vector3 targetPoint, Vector3 position, Quaternion rotation)
     {
-        //Calculate Direction
-        Vector3 directionOfBullet = targetPoint - position;
+        try
+        {
+            //Calculate Direction
+            Vector3 directionOfBullet = targetPoint - position;
 
-        //Calculate BulletSpread
-        float x = UnityEngine.Random.Range(-spread, +spread);
-        float y = UnityEngine.Random.Range(-spread, +spread);
+            //Calculate BulletSpread
+            float x = UnityEngine.Random.Range(-spread, +spread);
+            float y = UnityEngine.Random.Range(-spread, +spread);
 
-        //Add Bulletspread
-        Vector3 directionOfBulletWithSpread = directionOfBullet + new Vector3(x, y, 0);
+            //Add Bulletspread
+            Vector3 directionOfBulletWithSpread = directionOfBullet + new Vector3(x, y, 0);
 
-        //Create Bullet
-        GameObject currentBullet = Instantiate(bullet, position, rotation);
-        currentBullet.GetComponent<NetworkObject>().Spawn();
+            //Create Bullet
+            GameObject currentBullet = Instantiate(bullet, position, rotation);
+            currentBullet.GetComponent<NetworkObject>().Spawn();
 
-        //Rotate it properly
-        currentBullet.transform.forward = directionOfBulletWithSpread.normalized;
+            //Rotate it properly
+            currentBullet.transform.forward = directionOfBulletWithSpread.normalized;
 
-        //Add Force to Bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionOfBulletWithSpread.normalized * shootForce, ForceMode.Impulse);
+            //Add Force to Bullet
+            currentBullet.GetComponent<Rigidbody>().AddForce(directionOfBulletWithSpread.normalized * shootForce, ForceMode.Impulse);
+
+            //Create MuzzleFlash if it exists
+            if (muzzleFlash != null)
+            {
+                GameObject currentMuzzleFlash = Instantiate(muzzleFlash, position, rotation);
+                currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
+                currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 }
