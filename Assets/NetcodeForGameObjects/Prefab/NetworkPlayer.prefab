@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888763586510750943}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.216, y: -0, z: 0}
+  m_LocalPosition: {x: 0.22, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -410,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49fff93d096bff46a64a8003e575c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4416926081852918481}
   bullet: {fileID: 3122073519443132866, guid: 6896c211f55f73c4981f8fdc969a0e4d, type: 3}
   shootForce: 300
   timeBetweenShoooting: 0.1
@@ -423,7 +422,7 @@ MonoBehaviour:
   allowInvoke: 1
   myCamera: {fileID: 0}
   attackPoint: {fileID: 7142266212987775729}
-  muzzleFlash: {fileID: 0}
+  muzzleFlash: {fileID: 100008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
   ammoDisplay: {fileID: 0}
 --- !u!1 &8338988566280778634
 GameObject:

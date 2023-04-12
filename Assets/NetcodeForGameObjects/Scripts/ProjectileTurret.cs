@@ -113,7 +113,8 @@ public class ProjectileTurret : NetworkBehaviour
         //Create MuzzleFlash if it exists
         if (muzzleFlash != null)
         {
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            var currentMuzzleFlash = Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            currentMuzzleFlash.transform.localScale= new Vector3(3, 3, 3);
         }
 
         bulletsLeft--;
