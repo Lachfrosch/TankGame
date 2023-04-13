@@ -83,6 +83,8 @@ public class LobbyController : MonoBehaviour
                 {
                     //Player got Kicked
                     _joinedLobby = null;
+                    _InGame = false;
+                    NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
                     menuHandler.SetMenu(1);
                 }
                 else
@@ -198,6 +200,8 @@ public class LobbyController : MonoBehaviour
         try
         {
             await LobbyService.Instance.RemovePlayerAsync(_joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+            _InGame = false;
+            NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
             menuHandler.SetMenu(1);
         }
         catch (LobbyServiceException e)

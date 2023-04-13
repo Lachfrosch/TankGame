@@ -117,6 +117,11 @@ namespace StarterAssets
 
         private bool _hasAnimator;
 
+        public Transform[] leftWheels; // array of left wheels
+        public Transform[] rightWheels; // array of right wheels
+        public float trackScrollSpeed = 0.5f; // speed of track scrolling
+        public Transform turret; //Turret
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -237,6 +242,12 @@ namespace StarterAssets
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+
+                // update turret rotations based on camera movement
+                turret.rotation = Quaternion.Euler(-90.0f, _cinemachineTargetYaw - 90.0f, 0.0f); //Move only Left and Right
+                //turret.rotation = Quaternion.Euler(-90.0f, - 90.0f, 0.0f); //Don't move Left and Right
+                //turret.rotation *= Quaternion.Euler(0.0f, ClampAngle(_cinemachineTargetPitch, -60, 10), 0.0f);
+
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -331,6 +342,17 @@ namespace StarterAssets
             // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+
+            // update wheel rotations based on tank movement
+            float leftWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI;
+            float rightWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI;
+            for (int i = 0; i < leftWheels.Length; i++)
+            {
+                Quaternion leftRotation = Quaternion.Euler(0.0f, 0.0f, leftWheelRotation);
+                Quaternion rightRotation = Quaternion.Euler(0.0f, 0.0f, rightWheelRotation);
+                leftWheels[i].rotation *= leftRotation;
+                rightWheels[i].rotation *= rightRotation;
+            }
 
             // update animator if using character
             if (_hasAnimator)
