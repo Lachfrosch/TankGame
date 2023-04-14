@@ -235,8 +235,8 @@ namespace StarterAssets
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
+            //if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (!LockCameraPosition){
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
@@ -244,7 +244,7 @@ namespace StarterAssets
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
 
                 // update turret rotations based on camera movement
-                turret.rotation = Quaternion.Euler(-90.0f, _cinemachineTargetYaw - 90.0f, 0.0f); //Move only Left and Right
+                turret.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f); //Move only Left and Right
                 //turret.rotation = Quaternion.Euler(-90.0f, - 90.0f, 0.0f); //Don't move Left and Right
                 //turret.rotation *= Quaternion.Euler(0.0f, ClampAngle(_cinemachineTargetPitch, -60, 10), 0.0f);
 
@@ -344,12 +344,12 @@ namespace StarterAssets
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update wheel rotations based on tank movement
-            float leftWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI;
-            float rightWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI;
+            float leftWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
+            float rightWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
             for (int i = 0; i < leftWheels.Length; i++)
             {
-                Quaternion leftRotation = Quaternion.Euler(0.0f, 0.0f, leftWheelRotation);
-                Quaternion rightRotation = Quaternion.Euler(0.0f, 0.0f, rightWheelRotation);
+                Quaternion leftRotation = Quaternion.Euler(leftWheelRotation, 0.0f, 0.0f);
+                Quaternion rightRotation = Quaternion.Euler(rightWheelRotation, 0.0f, 0.0f);
                 leftWheels[i].rotation *= leftRotation;
                 rightWheels[i].rotation *= rightRotation;
             }
