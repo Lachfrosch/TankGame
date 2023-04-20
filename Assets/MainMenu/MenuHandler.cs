@@ -71,6 +71,7 @@ public class MenuHandler : MonoBehaviour
         LobbyList.SetActive(false);
         Lobby.SetActive(false);
         CreateLobby.SetActive(false);
+        HUDCanvas.SetActive(false);
     }
 
     // Update is called once per frame
