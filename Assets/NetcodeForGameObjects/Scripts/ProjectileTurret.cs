@@ -33,8 +33,6 @@ public class ProjectileTurret : NetworkBehaviour
 
     private void Awake()
     {
-        var temp = GameObject.FindWithTag("AmmoDisplay");
-        ammoDisplay = temp.GetComponent<TMP_Text>();
         //Fill Magazine
         bulletsLeft = magazineSize;
         readyToShoot = true;
@@ -43,10 +41,9 @@ public class ProjectileTurret : NetworkBehaviour
     private void Start()
     {
         //Load Stuff that can't be set in the Prefab Designer
-        //var temp = FindObjectOfType<CinemachineVirtualCamera>();
         myCamera = FindObjectOfType<Camera>();
-        //var test = 2;
-        //ammoDisplay = GetComponentInParent<TMP_Text>();
+        var temp = GameObject.FindWithTag("AmmoDisplay");
+        ammoDisplay = temp.GetComponent<TMP_Text>();
     }
 
     private void Update()
