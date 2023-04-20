@@ -68,7 +68,7 @@ Transform:
   m_GameObject: {fileID: 4416926081852918481}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8338988566280778637}
@@ -158,8 +158,8 @@ MonoBehaviour:
   BottomClamp: -10
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  zoomMaxDistance: 30
-  zoomMinDistance: 10
+  zoomMaxDistance: 50
+  zoomMinDistance: 15
   zoomSpeed: 0.02
   leftWheels:
   - {fileID: 5056173740395908747}
@@ -218,6 +218,7 @@ MonoBehaviour:
   sprint: 0
   analogMovement: 0
   zoom: 0
+  aiming: 0
   cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &4416926081852918493
@@ -438,7 +439,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8338988566280778634}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

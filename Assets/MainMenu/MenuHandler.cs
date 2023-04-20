@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class MenuHandler : MonoBehaviour
 {
+    public GameObject MenuCanvas;
     public GameObject StartScreen;
     public GameObject LobbyList;
     public GameObject Lobby;
     public GameObject CreateLobby;
+    public GameObject HUDCanvas;
+    public GameObject CrosshairZoom;
+    public GameObject Crosshair;
 
     public enum Menus : int
     {
@@ -18,6 +24,7 @@ public class MenuHandler : MonoBehaviour
     }
     public void SetMenu(int menu)
     {
+        MenuCanvas.SetActive(true);
         StartScreen.SetActive(false);
         LobbyList.SetActive(false);
         Lobby.SetActive(false);
@@ -38,6 +45,24 @@ public class MenuHandler : MonoBehaviour
                 CreateLobby.SetActive(true);
                 break;
         }
+    }
+
+    public void UseHUD()
+    {
+        MenuCanvas.SetActive(false);
+        HUDCanvas.SetActive(true);
+    }
+
+    public void StartAim()
+    {
+        CrosshairZoom.SetActive(true);
+        Crosshair.SetActive(false);
+    }
+
+    public void StopAim()
+    {
+        CrosshairZoom.SetActive(false);
+        Crosshair.SetActive(true);
     }
     // Start is called before the first frame update
     void Start()

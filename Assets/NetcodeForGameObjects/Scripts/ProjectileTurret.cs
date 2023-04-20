@@ -33,6 +33,8 @@ public class ProjectileTurret : NetworkBehaviour
 
     private void Awake()
     {
+        var temp = GameObject.FindWithTag("AmmoDisplay");
+        ammoDisplay = temp.GetComponent<TMP_Text>();
         //Fill Magazine
         bulletsLeft = magazineSize;
         readyToShoot = true;

@@ -121,6 +121,8 @@ namespace StarterAssets
         public Transform[] rightWheels; // array of right wheels
         public float trackScrollSpeed = 0.5f; // speed of track scrolling
         public Transform turret; //Turret
+        private MenuHandler _menuHandler;
+        private float _currentCameraDistance;
 
         private bool IsCurrentDeviceMouse
         {
@@ -146,6 +148,7 @@ namespace StarterAssets
             if (_cinemachineVirtualCamera == null)
             {
                 _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                _currentCameraDistance = _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance;
             }
         }
 
@@ -172,8 +175,10 @@ namespace StarterAssets
                 _playerInput = GetComponent<PlayerInput>();
                 _playerInput.enabled = true;
                 _cinemachineVirtualCamera.Follow = transform.GetChild(0);
-                FindObjectOfType<Canvas>().enabled = false;
-                _cinemachineVirtualCamera.enabled = true;
+                _menuHandler = FindAnyObjectByType<MenuHandler>();
+                _menuHandler.UseHUD();
+                //FindObjectOfType<Canvas>().enabled = false;
+                //_cinemachineVirtualCamera.enabled = true;
             }
         }
 
@@ -221,22 +226,36 @@ namespace StarterAssets
 
         private void CameraZoom()
         {
-            var currentDistance = _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance;
-            if (currentDistance > zoomMinDistance && _input.zoom > 0)
+            var newDistance = _currentCameraDistance;
+            if (_currentCameraDistance > zoomMinDistance && _input.zoom > 0)
             {
-                _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance--;
+                newDistance--;
             }
-            else if (currentDistance < zoomMaxDistance && _input.zoom < 0)
+            else if (_currentCameraDistance < zoomMaxDistance && _input.zoom < 0)
             {
-                _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance++;
+                newDistance++;
             }
+
+            if (_input.aiming)
+            {
+                _menuHandler.StartAim();
+                _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 10;
+            }
+            else
+            {
+                _menuHandler.StopAim();
+                _currentCameraDistance = newDistance;
+                _cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = newDistance;
+            }
+
         }
 
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
             //if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            if (!LockCameraPosition){
+            if (!LockCameraPosition)
+            {
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
