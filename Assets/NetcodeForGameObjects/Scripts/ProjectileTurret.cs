@@ -176,7 +176,7 @@ public class ProjectileTurret : NetworkBehaviour
             {
                 GameObject currentMuzzleFlash = Instantiate(muzzleFlash, position, rotation);
                 currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
-                //currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
+                currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
             }
         }
         catch (Exception e)

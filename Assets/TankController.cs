@@ -8,6 +8,10 @@ using StarterAssets;
 using UnityEngine.InputSystem;
 #endif
 
+#if ENABLE_INPUT_SYSTEM
+[RequireComponent(typeof(PlayerInput))]
+#endif
+
 public class TankController : NetworkBehaviour
 {
     [Header("Player")]
@@ -130,14 +134,14 @@ public class TankController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        _menuHandler = FindAnyObjectByType<MenuHandler>();
+        _menuHandler.UseHUD();
         base.OnNetworkSpawn();
         if (IsClient && IsOwner)
         {
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
-            _menuHandler = FindAnyObjectByType<MenuHandler>();
-            _menuHandler.UseHUD();
             //FindObjectOfType<Canvas>().enabled = false;
             //_cinemachineVirtualCamera.enabled = true;
             var temp = new Vector3(10, 10, 10);
@@ -156,8 +160,11 @@ public class TankController : NetworkBehaviour
 
     private void LateUpdate()
     {
-        CameraRotation();
-        CameraZoom();
+        if (IsOwner)
+        {
+            CameraRotation();
+            CameraZoom();
+        }
     }
 
     private void CameraZoom()
@@ -201,7 +208,7 @@ public class TankController : NetworkBehaviour
             Vector3 eulerRotation = rb.transform.eulerAngles;
             // update turret rotations based on camera movement
             turret.rotation = Quaternion.Euler(eulerRotation.x, _cinemachineTargetYaw, eulerRotation.z);
-            
+
         }
 
         // clamp our rotations so our values are limited 360 degrees
@@ -218,7 +225,8 @@ public class TankController : NetworkBehaviour
         get
         {
 #if ENABLE_INPUT_SYSTEM
-            return _playerInput.currentControlScheme == "KeyboardMouse";
+            //return _playerInput.currentControlScheme == "KeyboardMouse";
+            return true;
 #else
 			return false;
 #endif
@@ -291,7 +299,7 @@ public class TankController : NetworkBehaviour
 
         // move the player
         //b.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                        // new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        // new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         rb.MovePosition(rb.position + (targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime));
     }
 }
