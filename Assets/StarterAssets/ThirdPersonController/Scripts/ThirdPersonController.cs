@@ -124,6 +124,10 @@ namespace StarterAssets
         private MenuHandler _menuHandler;
         private float _currentCameraDistance;
 
+        public BoxCollider _collider;
+
+
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -159,6 +163,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            _collider = GetComponent<BoxCollider>();
 
             AssignAnimationIDs();
 
@@ -196,8 +201,12 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            CameraRotation();
-            CameraZoom();
+            if (IsOwner)
+            {
+                CameraRotation();
+                CameraZoom();
+            }
+            
         }
 
         private void AssignAnimationIDs()
@@ -489,6 +498,16 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("Collision detected with " + collision.gameObject.name);
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            Debug.Log("Trigger detected with " + other.gameObject.name);
         }
     }
 }

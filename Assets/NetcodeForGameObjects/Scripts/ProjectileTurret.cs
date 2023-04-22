@@ -2,6 +2,7 @@ using Unity.Netcode;
 using TMPro;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class ProjectileTurret : NetworkBehaviour
 {
@@ -29,6 +30,8 @@ public class ProjectileTurret : NetworkBehaviour
     //Graphics
     public GameObject muzzleFlash;
     public TMP_Text ammoDisplay;
+
+    public LayerMask mask;
 
 
     private void Awake()
@@ -97,7 +100,7 @@ public class ProjectileTurret : NetworkBehaviour
 
         //Chek if bullet hits something in its Path;
         Vector3 targetPoint;
-        if (Physics.Raycast(bulletPath, out RaycastHit hit))
+        if (Physics.Raycast(bulletPath, out RaycastHit hit, mask))
         {
             targetPoint = hit.point;
         }
@@ -173,7 +176,7 @@ public class ProjectileTurret : NetworkBehaviour
             {
                 GameObject currentMuzzleFlash = Instantiate(muzzleFlash, position, rotation);
                 currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
-                currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
+                //currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
             }
         }
         catch (Exception e)
