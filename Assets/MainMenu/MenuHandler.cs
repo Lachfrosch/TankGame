@@ -15,42 +15,79 @@ public class MenuHandler : MonoBehaviour
     public GameObject CrosshairZoom;
     public GameObject Crosshair;
 
-    public enum Menus : int
+    private MenuIndex _currentMenuIndex;
+
+    public enum MenuIndex : int
     {
         StartScreen = 0,
         LobbyList = 1,
         Lobby = 2,
-        CreateLobby = 3
+        CreateLobby = 3,
+        HUD = 4
     }
-    public void SetMenu(int menu)
+
+    public void HideAll()
     {
-        MenuCanvas.SetActive(true);
+        MenuCanvas.SetActive(false);
         StartScreen.SetActive(false);
         LobbyList.SetActive(false);
         Lobby.SetActive(false);
         CreateLobby.SetActive(false);
+        HUDCanvas.SetActive(false);
+    }
 
+
+    public void SetMenu(MenuIndex menu)
+    {
+        _currentMenuIndex = menu;
+        HideAll();
         switch (menu)
         {
-            case (int)Menus.StartScreen:
+            case MenuIndex.StartScreen:
+                MenuCanvas.SetActive(true);
                 StartScreen.SetActive(true);
                 break;
-            case (int)Menus.LobbyList:
+            case MenuIndex.LobbyList:
+                MenuCanvas.SetActive(true);
                 LobbyList.SetActive(true);
                 break;
-            case (int)Menus.Lobby:
+            case MenuIndex.Lobby:
+                MenuCanvas.SetActive(true);
                 Lobby.SetActive(true);
                 break;
-            case (int)Menus.CreateLobby:
+            case MenuIndex.CreateLobby:
+                MenuCanvas.SetActive(true);
                 CreateLobby.SetActive(true);
+                break;
+            case MenuIndex.HUD:
+                HUDCanvas.SetActive(true);
                 break;
         }
     }
 
-    public void UseHUD()
+    public void PlayButtonClicked()
     {
-        MenuCanvas.SetActive(false);
-        HUDCanvas.SetActive(true);
+        SetMenu(MenuIndex.LobbyList);
+    }
+
+    public void QuitButtonClicked()
+    {
+        Application.Quit();
+    }
+
+    public void CreateLobbyClicked()
+    {
+        SetMenu(MenuIndex.CreateLobby);
+    }
+
+    public void BackFromLobbyListClicked()
+    {
+        SetMenu(MenuIndex.StartScreen);
+    }
+
+    public void BackFromCreateLobbyClicked()
+    {
+        SetMenu(MenuIndex.LobbyList);
     }
 
     public void StartAim()
@@ -77,6 +114,33 @@ public class MenuHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HideAll();
+            switch (_currentMenuIndex)
+            {
+                case MenuIndex.StartScreen:
+                    Application.Quit();
+                    break;
+                case MenuIndex.LobbyList:
+                    MenuCanvas.SetActive(true);
+                    StartScreen.SetActive(true);
+                    _currentMenuIndex = MenuIndex.StartScreen;
+                    break;
+                case MenuIndex.Lobby:
+                    MenuCanvas.SetActive(true);
+                    LobbyList.SetActive(true);
+                    _currentMenuIndex = MenuIndex.LobbyList;
+                    break;
+                case MenuIndex.CreateLobby:
+                    MenuCanvas.SetActive(true);
+                    LobbyList.SetActive(true);
+                    _currentMenuIndex = MenuIndex.LobbyList;
+                    break;
+                case MenuIndex.HUD:
+                    HUDCanvas.SetActive(true);
+                    break;
+            }
+        }
     }
 }

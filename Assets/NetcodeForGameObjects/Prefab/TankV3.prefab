@@ -504,8 +504,28 @@ MonoBehaviour:
   CameraAngleOverride: 0
   LockCameraPosition: 0
   zoomMaxDistance: 80
-  zoomMinDistance: 50
+  zoomMinDistance: 20
   zoomSpeed: 0.02
+  leftWheels:
+  - {fileID: 483184428166230408}
+  - {fileID: 464367796022359135}
+  - {fileID: 1900288326513532753}
+  - {fileID: 7877422914883748313}
+  - {fileID: 6970505774560572939}
+  - {fileID: 217544938227253340}
+  - {fileID: 189702618290685926}
+  - {fileID: 2768958092068900391}
+  - {fileID: 5700467311431485913}
+  rightWheels:
+  - {fileID: 1832004411608327429}
+  - {fileID: 764237724431955112}
+  - {fileID: 5019107932616323412}
+  - {fileID: 8878060550984468789}
+  - {fileID: 98283015944728632}
+  - {fileID: 2832167281744127071}
+  - {fileID: 1397414925711699551}
+  - {fileID: 4108001207313283979}
+  - {fileID: 8236033906122526435}
   turret: {fileID: 7992170967498634279}
 --- !u!114 &-6650772125339501046
 MonoBehaviour:
@@ -684,7 +704,6 @@ GameObject:
   - component: {fileID: 2336816130380156416}
   - component: {fileID: 4444047235493943195}
   - component: {fileID: 4290039219356254761}
-  - component: {fileID: 6242595100669692976}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -776,22 +795,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2165579551946672802, guid: c3c3e61cf7790ab418c90394efa16b0f, type: 3}
---- !u!114 &6242595100669692976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1003355127330617630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &1235320528967803332
 GameObject:
   m_ObjectHideFlags: 0

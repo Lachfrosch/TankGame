@@ -29,6 +29,6 @@ public class EntryHandler : MonoBehaviour
     public void EntryClicked()
     {
         _LobbyController.JoinLobbyById(_LobbyId);
-        _MenuHandler.SetMenu(2);
+        _MenuHandler.SetMenu(MenuHandler.MenuIndex.Lobby);
     }
 }

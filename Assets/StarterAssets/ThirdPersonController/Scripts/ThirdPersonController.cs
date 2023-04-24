@@ -181,7 +181,7 @@ namespace StarterAssets
                 _playerInput.enabled = true;
                 _cinemachineVirtualCamera.Follow = transform.GetChild(0);
                 _menuHandler = FindAnyObjectByType<MenuHandler>();
-                _menuHandler.UseHUD();
+                _menuHandler.SetMenu(MenuHandler.MenuIndex.HUD);
                 //FindObjectOfType<Canvas>().enabled = false;
                 //_cinemachineVirtualCamera.enabled = true;
             }

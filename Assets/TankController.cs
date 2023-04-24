@@ -97,6 +97,10 @@ public class TankController : NetworkBehaviour
     // menue
     private MenuHandler _menuHandler;
 
+    //Wheels
+    public Transform[] leftWheels; // array of left wheels
+    public Transform[] rightWheels; // array of right wheels
+
     //Turret
     public Transform turret;
 
@@ -135,7 +139,7 @@ public class TankController : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         _menuHandler = FindAnyObjectByType<MenuHandler>();
-        _menuHandler.UseHUD();
+        _menuHandler.SetMenu(MenuHandler.MenuIndex.HUD);
         base.OnNetworkSpawn();
         if (IsClient && IsOwner)
         {
@@ -301,5 +305,16 @@ public class TankController : NetworkBehaviour
         //b.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
         // new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         rb.MovePosition(rb.position + (targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime));
+
+        // update wheel rotations based on tank movement
+        float leftWheelRotation = (_input.move.x - _input.move.y) * (targetSpeed / 100) * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
+        float rightWheelRotation = (_input.move.x - _input.move.y) * (targetSpeed / 100) * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
+        for (int i = 0; i < leftWheels.Length; i++)
+        {
+            Quaternion leftRotation = Quaternion.Euler(leftWheelRotation, 0.0f, 0.0f);
+            Quaternion rightRotation = Quaternion.Euler(rightWheelRotation, 0.0f, 0.0f);
+            leftWheels[i].rotation *= leftRotation;
+            rightWheels[i].rotation *= rightRotation;
+        }
     }
 }
