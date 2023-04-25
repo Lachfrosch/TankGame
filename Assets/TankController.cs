@@ -146,10 +146,7 @@ public class TankController : NetworkBehaviour
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
-            //FindObjectOfType<Canvas>().enabled = false;
-            //_cinemachineVirtualCamera.enabled = true;
-            var temp = new Vector3(10, 10, 10);
-            transform.position += temp;
+            transform.position += GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
         }
     }
 

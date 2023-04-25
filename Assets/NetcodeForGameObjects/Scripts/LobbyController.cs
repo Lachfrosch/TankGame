@@ -164,6 +164,11 @@ public class LobbyController : MonoBehaviour
         return null;
     }
 
+    public List<Player> ListPlayers()
+    {
+        return _joinedLobby.Players;
+    }
+
     public async void JoinLobbyById(string lobbyId)
     {
         try
@@ -249,7 +254,9 @@ public class LobbyController : MonoBehaviour
         return new Player
         {
             Data = new Dictionary<string, PlayerDataObject>{
-                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) }
+                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) },
+                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "1")},
+                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "1")}
             }
         };
     }

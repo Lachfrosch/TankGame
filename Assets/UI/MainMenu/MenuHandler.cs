@@ -12,8 +12,12 @@ public class MenuHandler : MonoBehaviour
     public GameObject Lobby;
     public GameObject CreateLobby;
     public GameObject HUDCanvas;
+    public GameObject ScoreboardCanvas;
     public GameObject CrosshairZoom;
     public GameObject Crosshair;
+
+    public delegate void UpdateScoreboard();
+    public event UpdateScoreboard updateScoreboard;
 
     private MenuIndex _currentMenuIndex;
 
@@ -34,6 +38,7 @@ public class MenuHandler : MonoBehaviour
         Lobby.SetActive(false);
         CreateLobby.SetActive(false);
         HUDCanvas.SetActive(false);
+        ScoreboardCanvas.SetActive(false);
     }
 
 
@@ -101,6 +106,17 @@ public class MenuHandler : MonoBehaviour
         CrosshairZoom.SetActive(false);
         Crosshair.SetActive(true);
     }
+
+    public void ShowScoreboard()
+    {
+        ScoreboardCanvas.SetActive(true);
+    }
+
+    public void HideScoreboard()
+    {
+        ScoreboardCanvas.SetActive(false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -109,6 +125,7 @@ public class MenuHandler : MonoBehaviour
         Lobby.SetActive(false);
         CreateLobby.SetActive(false);
         HUDCanvas.SetActive(false);
+        ScoreboardCanvas.SetActive(false);
     }
 
     // Update is called once per frame
@@ -141,6 +158,16 @@ public class MenuHandler : MonoBehaviour
                     HUDCanvas.SetActive(true);
                     break;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab) && _currentMenuIndex == MenuIndex.HUD)
+        {
+            updateScoreboard?.Invoke();
+            ShowScoreboard();
+        }
+        else if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            HideScoreboard();
         }
     }
 }
