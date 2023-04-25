@@ -27,6 +27,8 @@ public class CFX_AutoDestructShuriken : NetworkBehaviour
                     //IMPORTANT --> Added by Lachfrosch in order to make Effects work with Netcode!
                     if (IsServer)
                 {
+
+                    gameObject.GetComponent<NetworkObject>().Despawn();
                     GameObject.Destroy(this.gameObject);
                 }
                 break;

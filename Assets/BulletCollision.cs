@@ -33,7 +33,11 @@ public class BulletCollision : NetworkBehaviour
             currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
             currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
+
+        this.gameObject.SetActive(false);
+
         gameObject.GetComponent<NetworkObject>().Despawn();
-        Destroy(gameObject);
+        //Destroy(gameObject);
+
     }
 }
