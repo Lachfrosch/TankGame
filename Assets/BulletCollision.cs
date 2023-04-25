@@ -20,6 +20,16 @@ public class BulletCollision : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        var hitTarget = collision.gameObject;
+        if (hitTarget != null)
+        {
+            var playerHealth = hitTarget.GetComponent<PlayerHealth>();
+            if (playerHealth != null && playerHealth.gameObject  == hitTarget)
+            {
+                playerHealth.TakeDamage(25);
+            }
+        }
+        this.gameObject.SetActive(false);
         CreateExplosionAndDespawnServerRpc(collision.contacts[0].point);
     }
 
@@ -34,10 +44,12 @@ public class BulletCollision : NetworkBehaviour
             currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
 
-        this.gameObject.SetActive(false);
-
-        gameObject.GetComponent<NetworkObject>().Despawn();
+        Invoke(nameof(DeleteObject), 1);
         //Destroy(gameObject);
+    }
 
+    private void DeleteObject()
+    {
+        gameObject.GetComponent<NetworkObject>().Despawn();
     }
 }
