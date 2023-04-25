@@ -208,8 +208,23 @@ public class TankController : NetworkBehaviour
 
             Vector3 eulerRotation = rb.transform.eulerAngles;
             // update turret rotations based on camera movement
-            turret.rotation = Quaternion.Euler(eulerRotation.x, _cinemachineTargetYaw, eulerRotation.z);
 
+            var rotationAboutAxis = Quaternion.Euler(transform.rotation.x, _cinemachineTargetYaw - transform.rotation.eulerAngles.y, transform.rotation.z);
+            Debug.Log("Current Yaw: " + _cinemachineTargetYaw);
+            Debug.Log("Current X: " + transform.rotation.x);
+            Debug.Log("Current Y: " + transform.rotation.y);
+            Debug.Log("Current Z: " + transform.rotation.z);
+
+           // var tiltOfAxis = Quaternion.Euler(, 0.0f, transform.rotation.z);
+
+            //turret.rotation = Quaternion.Euler(eulerRotation.x, _cinemachineTargetYaw, eulerRotation.z);
+            //turret.localRotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
+
+            //turret.localRotation = tiltOfAxis * rotationAboutAxis;
+            turret.localRotation = rotationAboutAxis;
+            Debug.Log("Result X: " + turret.rotation.eulerAngles.x);
+            Debug.Log("Result Y: " + turret.rotation.eulerAngles.y);
+            Debug.Log("Result Z: " + turret.rotation.eulerAngles.z);
         }
 
         // clamp our rotations so our values are limited 360 degrees
