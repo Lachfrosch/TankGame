@@ -1,7 +1,6 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class BulletCollision : NetworkBehaviour
+public class BulletCollision : MonoBehaviour
 {
     //Graphics
     public GameObject hitExplosion;
@@ -20,20 +19,33 @@ public class BulletCollision : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        CreateExplosionAndDespawnServerRpc(collision.contacts[0].point);
+        this.gameObject.SetActive(false);
+        var hitTarget = collision.gameObject;
+        if (hitTarget != null)
+        {
+            var playerHealth = hitTarget.GetComponent<PlayerHealth>();
+            if (playerHealth != null && playerHealth.gameObject  == hitTarget)
+            {
+                playerHealth.TakeDamage(25);
+            }
+        }
+        CreateExplosionAndDespawn(collision.contacts[0].point);
     }
 
-    [ServerRpc]
-    private void CreateExplosionAndDespawnServerRpc(Vector3 location)
+    private void CreateExplosionAndDespawn(Vector3 location)
     {
         //Create MuzzleFlash if it exists
         if (hitExplosion != null)
         {
             GameObject currentMuzzleFlash = Instantiate(hitExplosion, location, Quaternion.identity);
             currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
-            currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
-        gameObject.GetComponent<NetworkObject>().Despawn();
+
+        Invoke(nameof(DeleteObject), 1f);
+    }
+
+    private void DeleteObject()
+    {
         Destroy(gameObject);
     }
 }

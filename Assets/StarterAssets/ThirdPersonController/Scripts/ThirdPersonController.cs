@@ -84,8 +84,6 @@ namespace StarterAssets
         // player
         private float _speed;
         private float _animationBlend;
-        private float _targetRotation = 0.0f;
-        private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
@@ -124,6 +122,10 @@ namespace StarterAssets
         private MenuHandler _menuHandler;
         private float _currentCameraDistance;
 
+        public BoxCollider _collider;
+
+
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -159,6 +161,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            _collider = GetComponent<BoxCollider>();
 
             AssignAnimationIDs();
 
@@ -176,7 +179,7 @@ namespace StarterAssets
                 _playerInput.enabled = true;
                 _cinemachineVirtualCamera.Follow = transform.GetChild(0);
                 _menuHandler = FindAnyObjectByType<MenuHandler>();
-                _menuHandler.UseHUD();
+                _menuHandler.SetMenu(MenuHandler.MenuIndex.HUD);
                 //FindObjectOfType<Canvas>().enabled = false;
                 //_cinemachineVirtualCamera.enabled = true;
             }
@@ -196,8 +199,12 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            CameraRotation();
-            CameraZoom();
+            if (IsOwner)
+            {
+                CameraRotation();
+                CameraZoom();
+            }
+            
         }
 
         private void AssignAnimationIDs()
@@ -359,8 +366,7 @@ namespace StarterAssets
             }
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update wheel rotations based on tank movement
             float leftWheelRotation = (_input.move.x - _input.move.y) * targetSpeed * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
@@ -489,6 +495,16 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("Collision detected with " + collision.gameObject.name);
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            Debug.Log("Trigger detected with " + other.gameObject.name);
         }
     }
 }

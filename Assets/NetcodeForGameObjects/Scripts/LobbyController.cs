@@ -84,8 +84,11 @@ public class LobbyController : MonoBehaviour
                     //Player got Kicked
                     _joinedLobby = null;
                     _InGame = false;
-                    NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
-                    menuHandler.SetMenu(1);
+                    if (NetworkManager.Singleton.IsConnectedClient)
+                    {
+                        NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+                    }
+                    menuHandler.SetMenu(MenuHandler.MenuIndex.LobbyList);
                 }
                 else
                 {
@@ -100,7 +103,7 @@ public class LobbyController : MonoBehaviour
 
                 if (_joinedLobby == null)
                 {
-                    menuHandler.SetMenu(1);
+                    menuHandler.SetMenu(MenuHandler.MenuIndex.LobbyList);
                 }
             }
         }
@@ -133,7 +136,7 @@ public class LobbyController : MonoBehaviour
 
             _hostLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             _joinedLobby = _hostLobby;
-            menuHandler.SetMenu(2);
+            menuHandler.SetMenu(MenuHandler.MenuIndex.Lobby);
             Debug.Log("Created Lobby! " + _hostLobby.Name + " " + _hostLobby.MaxPlayers);
         }
         catch (LobbyServiceException e)
@@ -161,6 +164,11 @@ public class LobbyController : MonoBehaviour
         return null;
     }
 
+    public List<Player> ListPlayers()
+    {
+        return _joinedLobby.Players;
+    }
+
     public async void JoinLobbyById(string lobbyId)
     {
         try
@@ -170,7 +178,7 @@ public class LobbyController : MonoBehaviour
                 Player = GetPlayer()
             };
             _joinedLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
-            menuHandler.SetMenu(2);
+            menuHandler.SetMenu(MenuHandler.MenuIndex.Lobby);
         }
         catch (LobbyServiceException e)
         {
@@ -187,7 +195,7 @@ public class LobbyController : MonoBehaviour
                 Player = GetPlayer()
             };
             _joinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
-            menuHandler.SetMenu(2);
+            menuHandler.SetMenu(MenuHandler.MenuIndex.Lobby);
         }
         catch (LobbyServiceException e)
         {
@@ -201,8 +209,11 @@ public class LobbyController : MonoBehaviour
         {
             await LobbyService.Instance.RemovePlayerAsync(_joinedLobby.Id, AuthenticationService.Instance.PlayerId);
             _InGame = false;
-            NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
-            menuHandler.SetMenu(1);
+            if (NetworkManager.Singleton.IsConnectedClient)
+            {
+                NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+            }
+            menuHandler.SetMenu(MenuHandler.MenuIndex.LobbyList);
         }
         catch (LobbyServiceException e)
         {
@@ -230,7 +241,7 @@ public class LobbyController : MonoBehaviour
         try
         {
             await LobbyService.Instance.QuickJoinLobbyAsync();
-            menuHandler.SetMenu(2);
+            menuHandler.SetMenu(MenuHandler.MenuIndex.Lobby);
         }
         catch (LobbyServiceException e)
         {
@@ -243,7 +254,9 @@ public class LobbyController : MonoBehaviour
         return new Player
         {
             Data = new Dictionary<string, PlayerDataObject>{
-                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) }
+                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) },
+                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "1")},
+                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "1")}
             }
         };
     }

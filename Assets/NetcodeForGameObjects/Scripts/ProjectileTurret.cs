@@ -2,6 +2,7 @@ using Unity.Netcode;
 using TMPro;
 using UnityEngine;
 using System;
+using StarterAssets;
 
 public class ProjectileTurret : NetworkBehaviour
 {
@@ -30,6 +31,10 @@ public class ProjectileTurret : NetworkBehaviour
     public GameObject muzzleFlash;
     public TMP_Text ammoDisplay;
 
+    public LayerMask mask;
+
+    private StarterAssetsInputs _input;
+
 
     private void Awake()
     {
@@ -44,6 +49,7 @@ public class ProjectileTurret : NetworkBehaviour
         myCamera = FindObjectOfType<Camera>();
         var temp = GameObject.FindWithTag("AmmoDisplay");
         ammoDisplay = temp.GetComponent<TMP_Text>();
+        _input = GetComponent<StarterAssetsInputs>();
     }
 
     private void Update()
@@ -64,15 +70,15 @@ public class ProjectileTurret : NetworkBehaviour
         //Check if hold to fire is allowed
         if (allowButtonHold)
         {
-            isShooting = Input.GetKey(KeyCode.Mouse0);
+            isShooting = _input.shooting;
         }
         else
         {
-            isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+            isShooting = _input.shooting;
         }
 
         //Reloading
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !IsReloading)
+        if (_input.reaload && bulletsLeft < magazineSize && !IsReloading)
         {
             Reload();
         }
@@ -97,7 +103,7 @@ public class ProjectileTurret : NetworkBehaviour
 
         //Chek if bullet hits something in its Path;
         Vector3 targetPoint;
-        if (Physics.Raycast(bulletPath, out RaycastHit hit))
+        if (Physics.Raycast(bulletPath, out RaycastHit hit, mask))
         {
             targetPoint = hit.point;
         }

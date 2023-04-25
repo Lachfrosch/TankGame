@@ -5,7 +5,6 @@ using TMPro;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class GetLobbyHandler : MonoBehaviour
 {
