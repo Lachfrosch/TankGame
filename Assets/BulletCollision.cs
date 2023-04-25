@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class BulletCollision : NetworkBehaviour
+public class BulletCollision : MonoBehaviour
 {
     //Graphics
     public GameObject hitExplosion;
@@ -44,7 +44,7 @@ public class BulletCollision : NetworkBehaviour
             currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
 
-        Invoke(nameof(DeleteObject), 1);
+        Invoke(nameof(DeleteObject), 1f);
         //Destroy(gameObject);
     }
 
