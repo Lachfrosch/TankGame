@@ -210,21 +210,8 @@ public class TankController : NetworkBehaviour
             // update turret rotations based on camera movement
 
             var rotationAboutAxis = Quaternion.Euler(transform.rotation.x, _cinemachineTargetYaw - transform.rotation.eulerAngles.y, transform.rotation.z);
-            Debug.Log("Current Yaw: " + _cinemachineTargetYaw);
-            Debug.Log("Current X: " + transform.rotation.x);
-            Debug.Log("Current Y: " + transform.rotation.y);
-            Debug.Log("Current Z: " + transform.rotation.z);
 
-           // var tiltOfAxis = Quaternion.Euler(, 0.0f, transform.rotation.z);
-
-            //turret.rotation = Quaternion.Euler(eulerRotation.x, _cinemachineTargetYaw, eulerRotation.z);
-            //turret.localRotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
-
-            //turret.localRotation = tiltOfAxis * rotationAboutAxis;
             turret.localRotation = rotationAboutAxis;
-            Debug.Log("Result X: " + turret.rotation.eulerAngles.x);
-            Debug.Log("Result Y: " + turret.rotation.eulerAngles.y);
-            Debug.Log("Result Z: " + turret.rotation.eulerAngles.z);
         }
 
         // clamp our rotations so our values are limited 360 degrees
@@ -241,8 +228,8 @@ public class TankController : NetworkBehaviour
         get
         {
 #if ENABLE_INPUT_SYSTEM
-            //return _playerInput.currentControlScheme == "KeyboardMouse";
-            return true;
+            return _playerInput.currentControlScheme == "KeyboardMouse";
+            //return true;
 #else
 			return false;
 #endif
@@ -293,40 +280,42 @@ public class TankController : NetworkBehaviour
         // ratation of tank
         if (_input.move != Vector2.zero)
         {
-            if (Input.GetKey(KeyCode.A))
+            if (_input.move.x < 0)
             {
                 transform.Rotate(0f, -0.5f, 0);
             }
-            if (Input.GetKey(KeyCode.D))
+            if (_input.move.x > 0)
             {
                 transform.Rotate(0f, +0.5f, 0);
             }
         }
 
         Vector3 targetDirection = Vector3.zero;
-        if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        if (_input.move.y > 0)
         {
             targetDirection = transform.forward;
         }
-        else if (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+        else if (_input.move.y < 0)
         {
             targetDirection = transform.forward * -1;
         }
 
         // move the player
-        //b.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-        // new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         rb.MovePosition(rb.position + (targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime));
 
         // update wheel rotations based on tank movement
-        float leftWheelRotation = (_input.move.x - _input.move.y) * (targetSpeed / 100) * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
-        float rightWheelRotation = (_input.move.x - _input.move.y) * (targetSpeed / 100) * Time.deltaTime * 360.0f / Mathf.PI * -1.0f;
-        for (int i = 0; i < leftWheels.Length; i++)
+        if (_input.move.sqrMagnitude > 0.1)
         {
-            Quaternion leftRotation = Quaternion.Euler(leftWheelRotation, 0.0f, 0.0f);
-            Quaternion rightRotation = Quaternion.Euler(rightWheelRotation, 0.0f, 0.0f);
-            leftWheels[i].rotation *= leftRotation;
-            rightWheels[i].rotation *= rightRotation;
+
+            float leftWheelRotation = (_input.move.x + _input.move.y) * _speed * Time.deltaTime * 360.0f / Mathf.PI;
+            float rightWheelRotation = ((- _input.move.x) + _input.move.y) * _speed * Time.deltaTime * 360.0f / Mathf.PI;
+            for (int i = 0; i < leftWheels.Length; i++)
+            {
+                Quaternion leftRotation = Quaternion.Euler(leftWheelRotation, 0.0f, 0.0f);
+                Quaternion rightRotation = Quaternion.Euler(rightWheelRotation, 0.0f, 0.0f);
+                leftWheels[i].rotation *= leftRotation;
+                rightWheels[i].rotation *= rightRotation;
+            }
         }
     }
 }
