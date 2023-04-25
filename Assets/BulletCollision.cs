@@ -41,7 +41,7 @@ public class BulletCollision : MonoBehaviour
         {
             GameObject currentMuzzleFlash = Instantiate(hitExplosion, location, Quaternion.identity);
             currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
-            currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
+            //currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
 
         Invoke(nameof(DeleteObject), 1f);
@@ -50,6 +50,7 @@ public class BulletCollision : MonoBehaviour
 
     private void DeleteObject()
     {
-        gameObject.GetComponent<NetworkObject>().Despawn();
+        //gameObject.GetComponent<NetworkObject>().Despawn();
+        Destroy(gameObject);
     }
 }
