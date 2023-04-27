@@ -35,9 +35,15 @@ public class ProjectileTurret : NetworkBehaviour
 
     private StarterAssetsInputs _input;
 
+    // recoil
+    private float _recoil = 10000.0f;
+
+    // rigidbody
+    Rigidbody rb;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         //Fill Magazine
         bulletsLeft = magazineSize;
         readyToShoot = true;
@@ -113,6 +119,10 @@ public class ProjectileTurret : NetworkBehaviour
         }
 
         SpawnBulletServerRpc(targetPoint, attackPoint.position, Quaternion.identity);
+
+        // recoil
+        Vector3 force = attackPoint.TransformDirection(Vector3.back);
+        rb.AddForceAtPosition(force * _recoil, attackPoint.position, ForceMode.Impulse);
 
         bulletsLeft--;
         bulletsShot++;

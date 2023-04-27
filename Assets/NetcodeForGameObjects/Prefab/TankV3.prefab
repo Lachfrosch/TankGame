@@ -573,15 +573,8 @@ MonoBehaviour:
   FootstepAudioClips: []
   FootstepAudioVolume: 0.5
   JumpHeight: 5
-  Gravity: -15
   JumpTimeout: 5
-  FallTimeout: 0.15
   Grounded: 1
-  GroundedOffset: -0.14
-  GroundedRadius: 0.28
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   CinemachineCameraTarget: {fileID: 5828130421456517674}
   TopClamp: 70
   BottomClamp: -30
@@ -611,6 +604,7 @@ MonoBehaviour:
   - {fileID: 4108001207313283979}
   - {fileID: 8236033906122526435}
   turret: {fileID: 7992170967498634279}
+  gunPoint: {fileID: 4306608466600751553}
 --- !u!114 &-6650772125339501046
 MonoBehaviour:
   m_ObjectHideFlags: 0
