@@ -34,30 +34,15 @@ public class TankController : NetworkBehaviour
 
     [Space(10)]
     [Tooltip("The height the player can jump")]
-    public float JumpHeight = 1.2f;
-
-    [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-    public float Gravity = -15.0f;
+    public float JumpHeight = 5.0f;
 
     [Space(10)]
     [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-    public float JumpTimeout = 0.50f;
-
-    [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
-    public float FallTimeout = 0.15f;
+    public float JumpTimeout = 5.0f;
 
     [Header("Player Grounded")]
     [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
     public bool Grounded = true;
-
-    [Tooltip("Useful for rough ground")]
-    public float GroundedOffset = -0.14f;
-
-    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-    public float GroundedRadius = 0.28f;
-
-    [Tooltip("What layers the character uses as ground")]
-    public LayerMask GroundLayers;
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -111,6 +96,10 @@ public class TankController : NetworkBehaviour
     // rigidbody
     Rigidbody rb;
 
+    // jumping
+    private float _jumpTime = 0.0f;
+    private float _lastJump = 0.0f;
+
     private void Awake()
     {
 
@@ -156,6 +145,7 @@ public class TankController : NetworkBehaviour
         if (IsOwner)
         {
             Move();
+            Jump();
         }
     }
 
@@ -317,5 +307,38 @@ public class TankController : NetworkBehaviour
                 rightWheels[i].rotation *= rightRotation;
             }
         }
+    }
+
+    private void Jump()
+    {
+        bool canJump = false;
+        if (Grounded && JumpTimeout - _lastJump <= 0)
+        {
+            canJump = true;
+        }
+        if (_input.jump && Grounded && canJump)
+        {
+            _jumpTime = 0.0f;
+            _lastJump = 0.0f;
+            // später anpassen
+            Vector3 jumpVelocity = Vector3.up.normalized * _speed;
+            jumpVelocity.y = Mathf.Sqrt(2.0f * JumpHeight * Physics.gravity.magnitude);
+            rb.velocity = jumpVelocity;
+        }
+        if (!Grounded)
+        {
+            _jumpTime += Time.deltaTime;
+        }
+        _lastJump += Time.deltaTime;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        Grounded = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        Grounded = false;
     }
 }
