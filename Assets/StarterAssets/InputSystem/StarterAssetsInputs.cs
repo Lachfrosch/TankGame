@@ -15,6 +15,8 @@ namespace StarterAssets
         public bool shooting;
         public bool reaload;
 
+        public bool respawn;
+
         [Header("Movement Settings")]
         public bool analogMovement;
 
@@ -71,6 +73,11 @@ namespace StarterAssets
         {
             ReloadInput(value.isPressed);
         }
+
+        public void OnRespawn(InputValue value)
+        {
+            RespawnInput(value.isPressed);
+        }
 #endif
 
 
@@ -112,6 +119,11 @@ namespace StarterAssets
         public void ReloadInput(bool newReloadState)
         {
             reaload = newReloadState;
+        }
+
+        public void RespawnInput(bool newRespawnState)
+        {
+            respawn = newRespawnState;
         }
 
         private void OnApplicationFocus(bool hasFocus)

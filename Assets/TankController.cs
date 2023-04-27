@@ -317,5 +317,16 @@ public class TankController : NetworkBehaviour
                 rightWheels[i].rotation *= rightRotation;
             }
         }
+
+        if(_input.respawn)
+        {
+            PlayerRespawn();
+        }
+    }
+
+    private void PlayerRespawn()
+    {
+        //transform.position = new Vector3(295f, 15f, 280f);
+        transform.position = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
     }
 }
