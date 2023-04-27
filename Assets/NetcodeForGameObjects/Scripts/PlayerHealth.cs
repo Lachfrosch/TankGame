@@ -31,9 +31,11 @@ public class PlayerHealth : NetworkBehaviour
             _lastHit = DateTime.Now;
             _health -= Damage;
             _healthDisplay.text = _health.ToString() + " / 100";
-            if (_health < 0)
+            if (_health <= 0)
             {
-                //Player should die
+                Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+                transform.position = spawnpoint.position;
+                _health = 100;
             }
         }
     }
