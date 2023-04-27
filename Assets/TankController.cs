@@ -146,7 +146,9 @@ public class TankController : NetworkBehaviour
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
-            transform.position += GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            //transform.position += GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
+            transform.position = spawnpoint.position;
         }
     }
 
@@ -326,7 +328,8 @@ public class TankController : NetworkBehaviour
 
     private void PlayerRespawn()
     {
+        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         //transform.position = new Vector3(295f, 15f, 280f);
-        transform.position = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
+        transform.position = spawnpoint.position;
     }
 }
