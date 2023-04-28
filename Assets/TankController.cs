@@ -100,6 +100,11 @@ public class TankController : NetworkBehaviour
     private float _jumpTime = 0.0f;
     private float _lastJump = 0.0f;
 
+    // dampening
+    private float _rayDistance = 1.0f;
+    private float _fallDampening = 100000.0f;
+    private float _lastHit = 0.0f;
+
     private void Awake()
     {
 
@@ -146,6 +151,14 @@ public class TankController : NetworkBehaviour
         {
             Move();
             Jump();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsOwner)
+        {
+            Damp();
         }
     }
 
@@ -320,10 +333,11 @@ public class TankController : NetworkBehaviour
         {
             _jumpTime = 0.0f;
             _lastJump = 0.0f;
-            // später anpassen
-            Vector3 jumpVelocity = Vector3.up.normalized * _speed;
-            jumpVelocity.y = Mathf.Sqrt(2.0f * JumpHeight * Physics.gravity.magnitude);
-            rb.velocity = jumpVelocity;
+
+            //Vector3 jumpVelocity = Vector3.up.normalized * _speed;
+            Vector3 eulerRotation = rb.transform.eulerAngles;
+            Vector3 jumpDirection = Quaternion.Euler(eulerRotation.x, eulerRotation.y, eulerRotation.z) * Vector3.up * JumpHeight * 2.0f;
+            rb.velocity = jumpDirection;
         }
         if (!Grounded)
         {
@@ -340,5 +354,22 @@ public class TankController : NetworkBehaviour
     private void OnCollisionExit(Collision collision)
     {
         Grounded = false;
+    }
+
+    private void Damp()
+    {
+        Ray ray = new Ray(rb.position, Vector3.down);
+        RaycastHit hitInfo;
+        bool hit = Physics.Raycast(ray, out hitInfo, _rayDistance);
+        if (hit)
+        {
+            float distanceToGround = hitInfo.distance;
+            if (_lastHit - distanceToGround >= 0)
+            {
+                float dampeningForce = (distanceToGround / _rayDistance) * _fallDampening;
+                rb.AddForce(-rb.velocity * dampeningForce, ForceMode.Force);
+            }
+            _lastHit = distanceToGround;
+        }
     }
 }
