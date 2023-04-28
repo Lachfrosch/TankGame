@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerName: {fileID: 733140214664389790}
+  kickIcon: {fileID: 4893481864807805375}
 --- !u!1 &4893481864807805375
 GameObject:
   m_ObjectHideFlags: 0

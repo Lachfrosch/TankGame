@@ -321,4 +321,9 @@ public class LobbyController : MonoBehaviour
             Debug.Log(joinCode);
         }
     }
+
+    public bool IsPlayerHost()
+    {
+        return _hostLobby != null;
+    }
 }

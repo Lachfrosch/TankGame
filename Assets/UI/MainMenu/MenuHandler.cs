@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class MenuHandler : MonoBehaviour
     public GameObject ScoreboardCanvas;
     public GameObject CrosshairZoom;
     public GameObject Crosshair;
+    public LobbyController MyLobbyController;
+    public GameObject StartGameButton;
 
     public delegate void UpdateScoreboard();
     public event UpdateScoreboard updateScoreboard;
@@ -59,6 +62,7 @@ public class MenuHandler : MonoBehaviour
             case MenuIndex.Lobby:
                 MenuCanvas.SetActive(true);
                 Lobby.SetActive(true);
+                StartGameButton.SetActive(MyLobbyController.IsPlayerHost());
                 break;
             case MenuIndex.CreateLobby:
                 MenuCanvas.SetActive(true);

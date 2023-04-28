@@ -10,6 +10,7 @@ TagManager:
   - SpawnPoint
   - FxTemporaire
   - PointDisplay
+  - StartGameButton
   layers:
   - Default
   - TransparentFX
