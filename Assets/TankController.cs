@@ -353,6 +353,7 @@ public class TankController : NetworkBehaviour
         currentExplosion.transform.localScale = new Vector3(3, 3, 3);
         currentExplosion.GetComponent<NetworkObject>().Spawn(); 
     }
+    */
 
     private void Jump()
     {
