@@ -111,6 +111,14 @@ public class TankController : NetworkBehaviour
     // rigidbody
     Rigidbody rb;
 
+    // Test explosion on spawn
+    /*
+    public GameObject explosion;
+    public Transform explosionPoint;
+    */
+    //---------------------------
+
+
     private void Awake()
     {
 
@@ -329,7 +337,18 @@ public class TankController : NetworkBehaviour
     private void PlayerRespawn()
     {
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        //transform.position = new Vector3(295f, 15f, 280f);
+        //TestPlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
         transform.position = spawnpoint.position;
+        //transform.position = GameObject.FindGameObjectWithTag("TestSpawnPoint").transform.position;
     }
+
+    /*
+    [ServerRpc]
+    private void TestPlayExplosionServerRpc(Vector3 position, Quaternion testRotation)
+    {
+        GameObject currentExplosion = Instantiate(explosion, position, testRotation);
+        currentExplosion.transform.localScale = new Vector3(3, 3, 3);
+        currentExplosion.GetComponent<NetworkObject>().Spawn(); 
+    }
+    */
 }

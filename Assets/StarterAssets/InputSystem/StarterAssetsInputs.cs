@@ -16,6 +16,7 @@ namespace StarterAssets
         public bool reaload;
 
         public bool respawn;
+        public bool kill;
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -78,6 +79,11 @@ namespace StarterAssets
         {
             RespawnInput(value.isPressed);
         }
+
+        public void OnKill(InputValue value)
+        {
+            KillInput(value.isPressed);
+        }
 #endif
 
 
@@ -124,6 +130,11 @@ namespace StarterAssets
         public void RespawnInput(bool newRespawnState)
         {
             respawn = newRespawnState;
+        }
+
+        public void KillInput(bool newKillState)
+        {
+            kill = newKillState;
         }
 
         private void OnApplicationFocus(bool hasFocus)

@@ -81,7 +81,16 @@
                     "name": "Respawn",
                     "type": "PassThrough",
                     "id": "a61da612-09e4-4a4f-8eba-8dd2dfedd758",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Kill",
+                    "type": "PassThrough",
+                    "id": "f19e3876-0938-41f7-a994-c37f118ca372",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -349,6 +358,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Respawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dfc4dca1-2a8e-4eac-a1b0-a6f7f3920e0b",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Kill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

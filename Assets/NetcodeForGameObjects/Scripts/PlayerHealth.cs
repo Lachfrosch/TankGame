@@ -2,9 +2,18 @@ using System;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using StarterAssets;
 
 public class PlayerHealth : NetworkBehaviour
 {
+    private StarterAssetsInputs _input;
+
+
+    /*
+    public GameObject explosion;
+    public Transform explosionPoint;
+    */
+
     private int _health;
     private TMP_Text _healthDisplay;
     private DateTime _lastHit;
@@ -21,8 +30,25 @@ public class PlayerHealth : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Input();
     }
+
+    /*
+    public void Input()
+    {
+        if(_input.kill)
+        {
+            _health = 0;
+        }
+        if (_health <= 0)
+        {
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            //PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
+            transform.position = spawnpoint.position;
+            //_health = 100;
+        }
+    }
+    */
 
     public void TakeDamage(int Damage)
     {
@@ -34,9 +60,28 @@ public class PlayerHealth : NetworkBehaviour
             if (_health <= 0)
             {
                 Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+                //PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
                 transform.position = spawnpoint.position;
                 _health = 100;
             }
         }
     }
+
+    /*
+    [ServerRpc]
+    private void PlayExplosionServerRpc(Vector3 position, Quaternion rotation)
+    {
+        try
+        {
+            GameObject currentExplosion = Instantiate(explosion, position, rotation);
+            currentExplosion.transform.localScale = new Vector3(10, 10, 10);
+            currentExplosion.GetComponent<NetworkObject>().Spawn();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
+    }
+    */
 }
