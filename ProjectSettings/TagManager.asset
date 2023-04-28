@@ -8,6 +8,8 @@ TagManager:
   - AmmoDisplay
   - HealthDisplay
   - SpawnPoint
+  - FxTemporaire
+  - PointDisplay
   layers:
   - Default
   - TransparentFX
