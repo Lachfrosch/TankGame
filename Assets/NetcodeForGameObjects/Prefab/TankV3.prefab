@@ -792,6 +792,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c72dc358def094b9d0206417203745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 5810266470597023128}
+  explosionPoint: {fileID: 400002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
 --- !u!114 &2625940342614541598
 MonoBehaviour:
   m_ObjectHideFlags: 0

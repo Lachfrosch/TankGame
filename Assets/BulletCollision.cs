@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BulletCollision : MonoBehaviour
 {
+    PlayerPoints playerPoints;
+
     //Graphics
     public GameObject hitExplosion;
 
@@ -24,9 +26,14 @@ public class BulletCollision : MonoBehaviour
         if (hitTarget != null)
         {
             var playerHealth = hitTarget.GetComponent<PlayerHealth>();
-            if (playerHealth != null && playerHealth.gameObject  == hitTarget)
+            if (playerHealth != null && playerHealth.gameObject == hitTarget)
             {
                 playerHealth.TakeDamage(25);
+                if (playerHealth.CheckIfKilled() == true)
+                {
+                    //var playerPoints = .GetComponent<PlayerPoints>();
+                    playerPoints.MakePoints(50);
+                }
             }
         }
         CreateExplosionAndDespawn(collision.contacts[0].point);

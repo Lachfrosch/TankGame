@@ -8,15 +8,13 @@ public class PlayerHealth : NetworkBehaviour
 {
     private StarterAssetsInputs _input;
 
-
-    /*
     public GameObject explosion;
     public Transform explosionPoint;
-    */
 
     private int _health;
     private TMP_Text _healthDisplay;
     private DateTime _lastHit;
+    private bool _isKilled;
 
     // Start is called before the first frame update
     void Start()
@@ -54,20 +52,35 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (IsOwner && (DateTime.Now - _lastHit).TotalSeconds > 0.1f)
         {
+            _isKilled = false;
             _lastHit = DateTime.Now;
             _health -= Damage;
             _healthDisplay.text = _health.ToString() + " / 100";
             if (_health <= 0)
             {
-                Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-                //PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
-                transform.position = spawnpoint.position;
+                _isKilled = true;
+                respawn();
                 _health = 100;
             }
         }
     }
 
-    /*
+    private void respawn()
+    {
+        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+        PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
+        transform.position = spawnpoint.position;
+    }
+
+   public bool CheckIfKilled()
+   {
+        if (_isKilled == true)
+            return true;
+        else
+            return false;
+   }
+
+    
     [ServerRpc]
     private void PlayExplosionServerRpc(Vector3 position, Quaternion rotation)
     {
@@ -83,5 +96,4 @@ public class PlayerHealth : NetworkBehaviour
         }
         
     }
-    */
 }

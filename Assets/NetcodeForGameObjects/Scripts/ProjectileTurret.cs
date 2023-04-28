@@ -35,6 +35,8 @@ public class ProjectileTurret : NetworkBehaviour
 
     private StarterAssetsInputs _input;
 
+    //private bool killed = false;
+
 
     private void Awake()
     {
@@ -129,6 +131,13 @@ public class ProjectileTurret : NetworkBehaviour
         {
             Invoke(nameof(Shoot), timeBetweenShots);
         }
+
+        /*
+        if (checkKill == true)
+        {
+            PlayerPoints.makePoints(50);
+        }
+        */
     }
 
     private void ResetShot()
@@ -187,4 +196,19 @@ public class ProjectileTurret : NetworkBehaviour
             Debug.Log(e);
         }
     }
+
+    /*
+    bool checkKill()
+    {
+        if (isKilled == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    */
+
 }
