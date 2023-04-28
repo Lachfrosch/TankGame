@@ -8,6 +8,7 @@ TagManager:
   - AmmoDisplay
   - HealthDisplay
   - SpawnPoint
+  - StartGameButton
   layers:
   - Default
   - TransparentFX

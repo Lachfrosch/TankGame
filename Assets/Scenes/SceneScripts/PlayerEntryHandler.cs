@@ -5,6 +5,7 @@ public class PlayerEntryHandler : MonoBehaviour
 {
     public TMP_Text PlayerName;
     private string _PlayerName;
+    public GameObject kickIcon;
     private LobbyController _LobbyController;
 
     public void InitializeEntry(string playerName, LobbyController lobbyController)
@@ -12,6 +13,7 @@ public class PlayerEntryHandler : MonoBehaviour
         _LobbyController = lobbyController;
         _PlayerName = playerName;
         PlayerName.text = _PlayerName;
+        kickIcon.SetActive(lobbyController.IsPlayerHost());        
     }
     public void EntryClicked()
     {

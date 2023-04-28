@@ -726,7 +726,7 @@ GameObject:
   - component: {fileID: 62508962}
   m_Layer: 5
   m_Name: ScrollPanel
-  m_TagString: Untagged
+  m_TagString: StartGameButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4174,8 +4174,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411202400}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.986301, y: -34.328808, z: -114.64303}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 26.986328, y: -34.328796, z: -114.64303}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5152,6 +5152,8 @@ MonoBehaviour:
   ScoreboardCanvas: {fileID: 783120499}
   CrosshairZoom: {fileID: 1295748568}
   Crosshair: {fileID: 1647175903}
+  MyLobbyController: {fileID: 411202401}
+  StartGameButton: {fileID: 1610961222}
 --- !u!4 &486559929
 Transform:
   m_ObjectHideFlags: 0
@@ -19801,7 +19803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2/10
+  m_text: 1/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
