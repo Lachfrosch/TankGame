@@ -449,7 +449,6 @@ GameObject:
   - component: {fileID: 431296675467913967}
   - component: {fileID: 6394142034569259382}
   - component: {fileID: -6650772125339501046}
-  - component: {fileID: -4510168839918750662}
   - component: {fileID: -7007504324921759043}
   - component: {fileID: 6884542355164274344}
   - component: {fileID: 4517152429534147166}
@@ -634,18 +633,6 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
---- !u!114 &-4510168839918750662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871780734129415689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-7007504324921759043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,10 +756,10 @@ MonoBehaviour:
   myCamera: {fileID: 0}
   attackPoint: {fileID: 4306608466600751553}
   muzzleFlash: {fileID: 100008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
-  ammoDisplay: {fileID: 0}
   mask:
     serializedVersion: 2
     m_Bits: 4
+  networkManager: {fileID: 0}
 --- !u!114 &4517152429534147166
 MonoBehaviour:
   m_ObjectHideFlags: 0

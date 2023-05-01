@@ -1,20 +1,20 @@
 using System;
 using TMPro;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
-using StarterAssets;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    private StarterAssetsInputs _input;
-
     public GameObject explosion;
     public Transform explosionPoint;
+    public string Owner;
 
     private int _health;
     private TMP_Text _healthDisplay;
     private DateTime _lastHit;
-    private bool _isKilled;
+
+    private LobbyController _lobbyController;
 
     // Start is called before the first frame update
     void Start()
@@ -23,64 +23,70 @@ public class PlayerHealth : NetworkBehaviour
         _lastHit = DateTime.Now;
         var temp = GameObject.FindWithTag("HealthDisplay");
         _healthDisplay = temp.GetComponent<TMP_Text>();
+
+        _lobbyController = GameObject.FindGameObjectWithTag("LobbyController").GetComponent<LobbyController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Input();
+        
     }
 
-    /*
-    public void Input()
+    public void SetOwner(string owner)
     {
-        if(_input.kill)
-        {
-            _health = 0;
-        }
-        if (_health <= 0)
-        {
-            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-            //PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
-            transform.position = spawnpoint.position;
-            //_health = 100;
-        }
+        Owner = owner;
     }
-    */
 
-    public void TakeDamage(int Damage)
+    public string getOwner()
+    {
+        return Owner;
+    }
+
+
+    public bool TakeDamage(int Damage)
     {
         if (IsOwner && (DateTime.Now - _lastHit).TotalSeconds > 0.1f)
         {
-            _isKilled = false;
             _lastHit = DateTime.Now;
             _health -= Damage;
-            _healthDisplay.text = _health.ToString() + " / 100";
+            UpdateHealthHud();
             if (_health <= 0)
             {
-                _isKilled = true;
-                respawn();
-                _health = 100;
+                Respawn();
+                return true;
             }
         }
+        return false;
     }
 
-    private void respawn()
+    private void UpdateHealthHud()
     {
+        _healthDisplay.text = _health.ToString() + " / 100";
+    }
+
+    private void Respawn()
+    {
+        CallClientRpcServerRpc(AuthenticationService.Instance.PlayerId);
+        _health = 100;
+        UpdateHealthHud();
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
         transform.position = spawnpoint.position;
     }
 
-   public bool CheckIfKilled()
-   {
-        if (_isKilled == true)
-            return true;
-        else
-            return false;
-   }
+    [ServerRpc]
+    private void CallClientRpcServerRpc(string Owner)
+    {
+        AddPlayerDeathClientRpc(Owner);
+    }
 
-    
+    [ClientRpc]
+    private void AddPlayerDeathClientRpc(string target)
+    {
+        _lobbyController.AddPlayerDeath(target);
+    }
+
     [ServerRpc]
     private void PlayExplosionServerRpc(Vector3 position, Quaternion rotation)
     {

@@ -11,6 +11,8 @@ TagManager:
   - FxTemporaire
   - PointDisplay
   - StartGameButton
+  - NetworkManager
+  - LobbyController
   layers:
   - Default
   - TransparentFX

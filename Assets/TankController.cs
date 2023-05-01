@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using Cinemachine;
 using StarterAssets;
+using Unity.Services.Authentication;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -96,13 +97,8 @@ public class TankController : NetworkBehaviour
     // rigidbody
     Rigidbody rb;
 
-    // Test explosion on spawn
-    /*
-    public GameObject explosion;
-    public Transform explosionPoint;
-    */
-    //---------------------------
-
+    //Lobby Controller
+    private LobbyController _lobbyController;
 
     // jumping
     private float _jumpTime = 0.0f;
@@ -136,6 +132,7 @@ public class TankController : NetworkBehaviour
     {
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _input = GetComponent<StarterAssetsInputs>();
+        _lobbyController = GameObject.FindGameObjectWithTag("LobbyController").GetComponent<LobbyController>();
     }
 
     public override void OnNetworkSpawn()
@@ -143,13 +140,17 @@ public class TankController : NetworkBehaviour
         _menuHandler = FindAnyObjectByType<MenuHandler>();
         _menuHandler.SetMenu(MenuHandler.MenuIndex.HUD);
         base.OnNetworkSpawn();
+        if (IsOwner)
+        {
+            Debug.Log(AuthenticationService.Instance.PlayerId);
+            GetComponent<PlayerHealth>().SetOwner(AuthenticationService.Instance.PlayerId);
+        }
         if (IsClient && IsOwner)
         {
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
             Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-            //transform.position += GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
             transform.position = spawnpoint.position;
         }
     }
@@ -321,7 +322,7 @@ public class TankController : NetworkBehaviour
         {
 
             float leftWheelRotation = (_input.move.x + _input.move.y) * _speed * Time.deltaTime * 360.0f / Mathf.PI;
-            float rightWheelRotation = ((- _input.move.x) + _input.move.y) * _speed * Time.deltaTime * 360.0f / Mathf.PI;
+            float rightWheelRotation = ((-_input.move.x) + _input.move.y) * _speed * Time.deltaTime * 360.0f / Mathf.PI;
             for (int i = 0; i < leftWheels.Length; i++)
             {
                 Quaternion leftRotation = Quaternion.Euler(leftWheelRotation, 0.0f, 0.0f);
@@ -331,7 +332,7 @@ public class TankController : NetworkBehaviour
             }
         }
 
-        if(_input.respawn)
+        if (_input.respawn)
         {
             PlayerRespawn();
         }
@@ -340,20 +341,8 @@ public class TankController : NetworkBehaviour
     private void PlayerRespawn()
     {
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        //TestPlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
         transform.position = spawnpoint.position;
-        //transform.position = GameObject.FindGameObjectWithTag("TestSpawnPoint").transform.position;
     }
-
-    /*
-    [ServerRpc]
-    private void TestPlayExplosionServerRpc(Vector3 position, Quaternion testRotation)
-    {
-        GameObject currentExplosion = Instantiate(explosion, position, testRotation);
-        currentExplosion.transform.localScale = new Vector3(3, 3, 3);
-        currentExplosion.GetComponent<NetworkObject>().Spawn(); 
-    }
-    */
 
     private void Jump()
     {
@@ -403,6 +392,47 @@ public class TankController : NetworkBehaviour
                 rb.AddForce(-rb.velocity * dampeningForce, ForceMode.Force);
             }
             _lastHit = distanceToGround;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!IsOwner)
+        {
+            return;
+        }
+
+        var bullet = collision.collider.gameObject.GetComponent<BulletCollision>();
+        if (bullet != null)
+        {
+            var temp = GetComponent<PlayerHealth>();
+            CallClientRpcServerRpc(temp.TakeDamage(25), bullet.GetOwner());
+            Debug.Log("Collision with Bullet!");
+        }
+    }
+
+    [ServerRpc]
+    public void CallClientRpcServerRpc(bool kill, string bulletOwner)
+    {
+        HandleDmgClientRpc(kill, bulletOwner);
+    }
+
+    [ClientRpc]
+    private void HandleDmgClientRpc(bool kill, string bulletOwner)
+    {
+        if (bulletOwner != AuthenticationService.Instance.PlayerId)
+        {
+            return;
+        }
+        if (kill)
+        {
+            //Give bulletOwner +1  kill
+            _lobbyController.AddPlayerKill();
+        }
+        else
+        {
+            //Give bulletOwner +1 hit
+            _lobbyController.AddPlayerHit();
         }
     }
 }

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using System;
 using StarterAssets;
+using Unity.Services.Authentication;
 
 public class ProjectileTurret : NetworkBehaviour
 {
@@ -29,7 +30,7 @@ public class ProjectileTurret : NetworkBehaviour
 
     //Graphics
     public GameObject muzzleFlash;
-    public TMP_Text ammoDisplay;
+    private TMP_Text _ammoDisplay;
 
     public LayerMask mask;
 
@@ -39,7 +40,11 @@ public class ProjectileTurret : NetworkBehaviour
     private float _recoil = 10000.0f;
 
     // rigidbody
-    Rigidbody rb;
+    private Rigidbody rb;
+
+    public GameObject networkManager;
+
+    private LobbyController _lobbyController;
 
     private void Awake()
     {
@@ -53,9 +58,11 @@ public class ProjectileTurret : NetworkBehaviour
     {
         //Load Stuff that can't be set in the Prefab Designer
         myCamera = FindObjectOfType<Camera>();
-        var temp = GameObject.FindWithTag("AmmoDisplay");
-        ammoDisplay = temp.GetComponent<TMP_Text>();
+        var GameobjectAmmoDisplay = GameObject.FindWithTag("AmmoDisplay");
+        _ammoDisplay = GameobjectAmmoDisplay.GetComponent<TMP_Text>();
         _input = GetComponent<StarterAssetsInputs>();
+        var gameObjectLobbyController = GameObject.FindWithTag("LobbyController");
+        _lobbyController = gameObjectLobbyController.GetComponent<LobbyController>();
     }
 
     private void Update()
@@ -65,9 +72,9 @@ public class ProjectileTurret : NetworkBehaviour
         MyInput();
 
         //Set AmmoDisplay, if it exists
-        if (ammoDisplay != null)
+        if (_ammoDisplay != null)
         {
-            ammoDisplay.SetText(bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+            _ammoDisplay.SetText(bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
         }
     }
 
@@ -118,7 +125,7 @@ public class ProjectileTurret : NetworkBehaviour
             targetPoint = bulletPath.GetPoint(100); //Just pick a Point 100 Units away;
         }
 
-        SpawnBulletServerRpc(targetPoint, attackPoint.position, Quaternion.identity);
+        SpawnBulletServerRpc(targetPoint, attackPoint.position, Quaternion.identity, AuthenticationService.Instance.PlayerId);
 
         // recoil
         Vector3 force = attackPoint.TransformDirection(Vector3.back);
@@ -139,13 +146,6 @@ public class ProjectileTurret : NetworkBehaviour
         {
             Invoke(nameof(Shoot), timeBetweenShots);
         }
-
-        /*
-        if (checkKill == true)
-        {
-            PlayerPoints.makePoints(50);
-        }
-        */
     }
 
     private void ResetShot()
@@ -167,7 +167,7 @@ public class ProjectileTurret : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SpawnBulletServerRpc(Vector3 targetPoint, Vector3 position, Quaternion rotation)
+    private void SpawnBulletServerRpc(Vector3 targetPoint, Vector3 position, Quaternion rotation, string owner)
     {
         try
         {
@@ -184,6 +184,7 @@ public class ProjectileTurret : NetworkBehaviour
             //Create Bullet
             GameObject currentBullet = Instantiate(bullet, position, rotation);
             currentBullet.GetComponent<NetworkObject>().Spawn();
+            currentBullet.GetComponent<BulletCollision>().SetOwner(owner);
 
             //Rotate it properly
             currentBullet.transform.forward = directionOfBulletWithSpread.normalized;
@@ -204,19 +205,4 @@ public class ProjectileTurret : NetworkBehaviour
             Debug.Log(e);
         }
     }
-
-    /*
-    bool checkKill()
-    {
-        if (isKilled == true)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    */
-
 }

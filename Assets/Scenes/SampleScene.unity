@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.120731406, g: 0.18645723, b: 0.33538952, a: 1}
+  m_IndirectSpecularColor: {r: 0.12076026, g: 0.18643647, b: 0.33524987, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4149,7 +4149,7 @@ GameObject:
   - component: {fileID: 411202407}
   m_Layer: 0
   m_Name: LobbyController
-  m_TagString: Untagged
+  m_TagString: LobbyController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7966,7 +7966,7 @@ GameObject:
   - component: {fileID: 801109290}
   m_Layer: 0
   m_Name: NetworkManager
-  m_TagString: Untagged
+  m_TagString: NetworkManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8029,6 +8029,11 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 100008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 100004, guid: b46890100828db6429ff69c322b45893, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -15636,7 +15641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8545238154821309594, guid: 353e7f9787533044793f150e1226818f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -600
+      value: -400
       objectReference: {fileID: 0}
     - target: {fileID: 8545238154821309594, guid: 353e7f9787533044793f150e1226818f, type: 3}
       propertyPath: m_SizeDelta.y
@@ -16773,7 +16778,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -600, y: -200}
+  m_SizeDelta: {x: -400, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1863717979
 MonoBehaviour:

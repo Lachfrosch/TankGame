@@ -1,8 +1,14 @@
+using System;
+using System.Linq;
+using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public class BulletCollision : MonoBehaviour
+public class BulletCollision : NetworkBehaviour
 {
     PlayerPoints playerPoints;
+    private NetworkVariable<FixedString64Bytes> _Owner = new NetworkVariable<FixedString64Bytes>();
+    private LobbyController _lobbyController;
 
     //Graphics
     public GameObject hitExplosion;
@@ -10,7 +16,7 @@ public class BulletCollision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        _lobbyController = GameObject.FindGameObjectWithTag("LobbyController").GetComponent<LobbyController>();
     }
 
     // Update is called once per frame
@@ -19,23 +25,20 @@ public class BulletCollision : MonoBehaviour
 
     }
 
+    public void SetOwner(string playerID)
+    {
+        _Owner.Value = playerID;
+        Debug.Log(_Owner);
+    }
+
+    public string GetOwner()
+    {
+        return _Owner.Value.ToString();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         this.gameObject.SetActive(false);
-        var hitTarget = collision.gameObject;
-        if (hitTarget != null)
-        {
-            var playerHealth = hitTarget.GetComponent<PlayerHealth>();
-            if (playerHealth != null && playerHealth.gameObject == hitTarget)
-            {
-                playerHealth.TakeDamage(25);
-                if (playerHealth.CheckIfKilled() == true)
-                {
-                    //var playerPoints = .GetComponent<PlayerPoints>();
-                    playerPoints.MakePoints(50);
-                }
-            }
-        }
         CreateExplosionAndDespawn(collision.contacts[0].point);
     }
 
@@ -46,6 +49,7 @@ public class BulletCollision : MonoBehaviour
         {
             GameObject currentMuzzleFlash = Instantiate(hitExplosion, location, Quaternion.identity);
             currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
+            currentMuzzleFlash.GetComponent<NetworkObject>().Spawn();
         }
 
         Invoke(nameof(DeleteObject), 1f);
@@ -53,6 +57,10 @@ public class BulletCollision : MonoBehaviour
 
     private void DeleteObject()
     {
-        Destroy(gameObject);
+        if (IsServer)
+        {
+            gameObject.GetComponent<NetworkObject>().Despawn();
+            GameObject.Destroy(this.gameObject);
+        }
     }
 }

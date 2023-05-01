@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
@@ -12,7 +11,8 @@ using Unity.Services.Relay;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
-
+using System;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class LobbyController : MonoBehaviour
 {
@@ -169,6 +169,55 @@ public class LobbyController : MonoBehaviour
         return _joinedLobby.Players;
     }
 
+    public void AddPlayerKill()
+    {
+        var player = ListPlayers().First(x => x.Id == AuthenticationService.Instance.PlayerId);
+        LobbyService.Instance.UpdatePlayerAsync(_joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
+        {
+            Data = new Dictionary<string, PlayerDataObject>{
+                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) },
+                { "PlayerScore", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, (Convert.ToInt32(player.Data["PlayerScore"].Value) + 60).ToString()) },
+                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, (Convert.ToInt32(player.Data["PlayerKills"].Value) + 1).ToString()) },
+                { "PlayerHits", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, (Convert.ToInt32(player.Data["PlayerHits"].Value) + 1).ToString())},
+                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerDeaths"].Value.ToString())}
+            }
+        });
+    }
+
+    public void AddPlayerDeath(string owner)
+    {
+        if (AuthenticationService.Instance.PlayerId != owner)
+        {
+            return;
+        }
+        var player = ListPlayers().First(x => x.Id == AuthenticationService.Instance.PlayerId);
+        LobbyService.Instance.UpdatePlayerAsync(_joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
+        {
+            Data = new Dictionary<string, PlayerDataObject>{
+                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) },
+                { "PlayerScore", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerScore"].Value.ToString()) },
+                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerKills"].Value.ToString() )},
+                { "PlayerHits", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerHits"].Value.ToString())},
+                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, (Convert.ToInt32(player.Data["PlayerDeaths"].Value) + 1).ToString())}
+            }
+        });
+    }
+
+    public void AddPlayerHit()
+    {
+        var player = ListPlayers().First(x => x.Id == AuthenticationService.Instance.PlayerId);
+        LobbyService.Instance.UpdatePlayerAsync(_joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
+        {
+            Data = new Dictionary<string, PlayerDataObject>{
+                { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerName"].Value) },
+                { "PlayerScore", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, (Convert.ToInt32(player.Data["PlayerScore"].Value) + 10).ToString()) },
+                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerKills"].Value.ToString() )},
+                { "PlayerHits", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, (Convert.ToInt32(player.Data["PlayerHits"].Value) + 1).ToString())},
+                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, player.Data["PlayerDeaths"].Value.ToString())}
+            }
+        });
+    }
+
     public async void JoinLobbyById(string lobbyId)
     {
         try
@@ -255,8 +304,10 @@ public class LobbyController : MonoBehaviour
         {
             Data = new Dictionary<string, PlayerDataObject>{
                 { "PlayerName", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, playerName) },
-                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "1")},
-                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "1")}
+                { "PlayerScore", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "0") },
+                { "PlayerKills", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "0")},
+                { "PlayerHits", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "0")},
+                { "PlayerDeaths", new PlayerDataObject (PlayerDataObject.VisibilityOptions.Member, "0")}
             }
         };
     }

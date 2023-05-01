@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -20,8 +21,14 @@ public class GetScoreboardHandler : MonoBehaviour
 
         //Get List of Players
         var playerList = lobbyController.ListPlayers();
+        
 
-        playerList.OrderBy(x => (Convert.ToInt32(x.Data["PlayerKills"].Value) / Convert.ToInt32(x.Data["PlayerDeaths"].Value)));
+        playerList.Sort((x, y) =>
+        {
+            return Convert.ToInt32(x.Data["PlayerScore"].Value) - Convert.ToInt32(y.Data["PlayerScore"].Value);
+        });
+
+        playerList.Reverse();
 
         //Create Entry for each Player in List
         for (int i = 0; i < playerList.Count; i++)
@@ -31,7 +38,7 @@ public class GetScoreboardHandler : MonoBehaviour
             var entry = Instantiate(entryPrefab, new Vector3(0, (i * -75) - 37.5f, 0), transform.rotation); //(i * -75) is for vertical spacing
 
             //Set values
-            entry.GetComponent<ScoreboardEntryHandler>().UpdateEntry((i + 1).ToString(), player.Data["PlayerName"].Value, (Convert.ToInt32(player.Data["PlayerKills"].Value) / Convert.ToInt32(player.Data["PlayerDeaths"].Value)).ToString());
+            entry.GetComponent<ScoreboardEntryHandler>().UpdateEntry((i + 1).ToString(), player);
 
             //Add to Container
             entry.transform.SetParent(entryContainer.transform, false);
@@ -48,6 +55,6 @@ public class GetScoreboardHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
