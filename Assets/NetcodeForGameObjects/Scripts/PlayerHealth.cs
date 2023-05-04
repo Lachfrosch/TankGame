@@ -73,6 +73,7 @@ public class PlayerHealth : NetworkBehaviour
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
         transform.position = spawnpoint.position;
+        transform.rotation = spawnpoint.rotation;
     }
 
     [ServerRpc]

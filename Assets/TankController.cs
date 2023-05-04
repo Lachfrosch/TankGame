@@ -152,6 +152,7 @@ public class TankController : NetworkBehaviour
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
             Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
             transform.position = spawnpoint.position;
+            transform.rotation = spawnpoint.rotation;
         }
     }
 
@@ -342,6 +343,7 @@ public class TankController : NetworkBehaviour
     {
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         transform.position = spawnpoint.position;
+        transform.rotation = spawnpoint.rotation;
     }
 
     private void Jump()
