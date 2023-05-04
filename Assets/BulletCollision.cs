@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class BulletCollision : NetworkBehaviour
 {
-    PlayerPoints playerPoints;
     private NetworkVariable<FixedString64Bytes> _Owner = new NetworkVariable<FixedString64Bytes>();
     private LobbyController _lobbyController;
 
@@ -45,7 +44,7 @@ public class BulletCollision : NetworkBehaviour
     private void CreateExplosionAndDespawn(Vector3 location)
     {
         //Create MuzzleFlash if it exists
-        if (hitExplosion != null)
+        if (hitExplosion != null && IsServer)
         {
             GameObject currentMuzzleFlash = Instantiate(hitExplosion, location, Quaternion.identity);
             currentMuzzleFlash.transform.localScale = new Vector3(3, 3, 3);
@@ -59,7 +58,10 @@ public class BulletCollision : NetworkBehaviour
     {
         if (IsServer)
         {
-            gameObject.GetComponent<NetworkObject>().Despawn();
+            if (gameObject.GetComponent<NetworkObject>().IsSpawned)
+            {
+                gameObject.GetComponent<NetworkObject>().Despawn();
+            }
             GameObject.Destroy(this.gameObject);
         }
     }

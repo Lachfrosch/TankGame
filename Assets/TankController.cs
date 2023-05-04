@@ -146,8 +146,9 @@ public class TankController : NetworkBehaviour
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
-            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            Transform spawnpoint = SpawnManager.GetSpawnpoint();
             transform.position = spawnpoint.position;
+            transform.rotation = spawnpoint.rotation;
         }
     }
 
@@ -308,17 +309,6 @@ public class TankController : NetworkBehaviour
                 rightWheels[i].rotation *= rightRotation;
             }
         }
-
-        if (_input.respawn)
-        {
-            PlayerRespawn();
-        }
-    }
-
-    private void PlayerRespawn()
-    {
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        transform.position = spawnpoint.position;
     }
 
     private void Jump()
@@ -370,7 +360,6 @@ public class TankController : NetworkBehaviour
         {
             var temp = GetComponent<PlayerHealth>();
             CallClientRpcServerRpc(temp.TakeDamage(25), bullet.GetOwner());
-            Debug.Log("Collision with Bullet!");
         }
     }
 
