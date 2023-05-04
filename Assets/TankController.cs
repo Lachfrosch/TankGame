@@ -109,11 +109,6 @@ public class TankController : NetworkBehaviour
     private float _fallDampening = 100000.0f;
     private float _lastHit = 0.0f;
 
-    //Test
-    public GameObject explosion;
-    public Transform explosionPoint;
-    //---------------
-
     private void Awake()
     {
 
@@ -155,7 +150,7 @@ public class TankController : NetworkBehaviour
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
             _cinemachineVirtualCamera.Follow = transform.GetChild(0);
-            Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+            Transform spawnpoint = SpawnManager.GetSpawnpoint();
             transform.position = spawnpoint.position;
             transform.rotation = spawnpoint.rotation;
         }
@@ -337,27 +332,6 @@ public class TankController : NetworkBehaviour
                 rightWheels[i].rotation *= rightRotation;
             }
         }
-
-        if (_input.respawn)
-        {
-            PlayerRespawn();
-        }
-    }
-
-    //Test
-    private void PlayerRespawn()
-    {
-        PlayExplosion(explosionPoint.position, Quaternion.identity);
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        transform.position = spawnpoint.position;
-        transform.rotation = spawnpoint.rotation;
-    }
-
-    private void PlayExplosion(Vector3 position, Quaternion rotation)
-    {
-        GameObject currentExplosion = Instantiate(explosion, position, rotation);
-        currentExplosion.transform.localScale = new Vector3(10, 10, 10);
-        currentExplosion.GetComponent<NetworkObject>().Spawn();
     }
 
     private void Jump()
@@ -423,7 +397,6 @@ public class TankController : NetworkBehaviour
         {
             var temp = GetComponent<PlayerHealth>();
             CallClientRpcServerRpc(temp.TakeDamage(25), bullet.GetOwner());
-            Debug.Log("Collision with Bullet!");
         }
     }
 

@@ -8,7 +8,7 @@ public class PlayerHealth : NetworkBehaviour
 {
     public GameObject explosion;
     public Transform explosionPoint;
-    public string Owner;
+    private string _owner;
 
     private int _health;
     private TMP_Text _healthDisplay;
@@ -35,12 +35,12 @@ public class PlayerHealth : NetworkBehaviour
 
     public void SetOwner(string owner)
     {
-        Owner = owner;
+        _owner = owner;
     }
 
     public string getOwner()
     {
-        return Owner;
+        return _owner;
     }
 
 
@@ -70,10 +70,10 @@ public class PlayerHealth : NetworkBehaviour
         CallClientRpcServerRpc(AuthenticationService.Instance.PlayerId);
         _health = 100;
         UpdateHealthHud();
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        PlayExplosion(explosionPoint.position, Quaternion.identity);
-        transform.position = spawnpoint.position;
-        transform.rotation = spawnpoint.rotation;
+        PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
+        Transform spawnpoint = SpawnManager.GetSpawnpoint();
+        transform.SetPositionAndRotation(spawnpoint.position, spawnpoint.rotation);
+
     }
 
     [ServerRpc]
@@ -88,10 +88,11 @@ public class PlayerHealth : NetworkBehaviour
         _lobbyController.AddPlayerDeath(target);
     }
 
-    private void PlayExplosion(Vector3 position, Quaternion rotation)
+    [ServerRpc]
+    private void PlayExplosionServerRpc(Vector3 position, Quaternion rotation)
     {
         GameObject currentExplosion = Instantiate(explosion, position, rotation);
-        currentExplosion.transform.localScale = new Vector3(10, 10, 10);
+        currentExplosion.transform.localScale = new Vector3(5, 5, 5);
         currentExplosion.GetComponent<NetworkObject>().Spawn();
     }
     

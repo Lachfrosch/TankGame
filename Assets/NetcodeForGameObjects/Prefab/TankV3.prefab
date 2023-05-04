@@ -452,7 +452,6 @@ GameObject:
   - component: {fileID: -7007504324921759043}
   - component: {fileID: 6884542355164274344}
   - component: {fileID: 4517152429534147166}
-  - component: {fileID: 2625940342614541598}
   m_Layer: 0
   m_Name: TankV3
   m_TagString: Untagged
@@ -607,8 +606,6 @@ MonoBehaviour:
   - {fileID: 4108001207313283979}
   - {fileID: 8236033906122526435}
   turret: {fileID: 7992170967498634279}
-  explosion: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
-  explosionPoint: {fileID: 4863920768913717723}
 --- !u!114 &-6650772125339501046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,21 +771,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c72dc358def094b9d0206417203745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 5810266470597023128}
-  explosionPoint: {fileID: 400002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
+  explosion: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
+  explosionPoint: {fileID: 4863920768913717723}
   Owner: 
---- !u!114 &2625940342614541598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871780734129415689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d55378e21282d493781913c3dc78d3dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1003355127330617630
 GameObject:
   m_ObjectHideFlags: 0
