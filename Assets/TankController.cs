@@ -109,6 +109,11 @@ public class TankController : NetworkBehaviour
     private float _fallDampening = 100000.0f;
     private float _lastHit = 0.0f;
 
+    //Test
+    public GameObject explosion;
+    public Transform explosionPoint;
+    //---------------
+
     private void Awake()
     {
 
@@ -339,11 +344,20 @@ public class TankController : NetworkBehaviour
         }
     }
 
+    //Test
     private void PlayerRespawn()
     {
+        PlayExplosion(explosionPoint.position, Quaternion.identity);
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
         transform.position = spawnpoint.position;
         transform.rotation = spawnpoint.rotation;
+    }
+
+    private void PlayExplosion(Vector3 position, Quaternion rotation)
+    {
+        GameObject currentExplosion = Instantiate(explosion, position, rotation);
+        currentExplosion.transform.localScale = new Vector3(10, 10, 10);
+        currentExplosion.GetComponent<NetworkObject>().Spawn();
     }
 
     private void Jump()

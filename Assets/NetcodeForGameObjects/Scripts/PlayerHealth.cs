@@ -93,18 +93,6 @@ public class PlayerHealth : NetworkBehaviour
         GameObject currentExplosion = Instantiate(explosion, position, rotation);
         currentExplosion.transform.localScale = new Vector3(10, 10, 10);
         currentExplosion.GetComponent<NetworkObject>().Spawn();
-
-        //Invoke(nameof(DeleteObject), 1f);
     }
-
-    /*
-    private void DeleteObject()
-    {
-        if (IsServer)
-        {
-            gameObject.GetComponent<NetworkObject>().Despawn();
-            GameObject.Destroy(this.gameObject);
-        }
-    }
-    */
+    
 }

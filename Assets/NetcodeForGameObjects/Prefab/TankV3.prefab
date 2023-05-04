@@ -607,6 +607,8 @@ MonoBehaviour:
   - {fileID: 4108001207313283979}
   - {fileID: 8236033906122526435}
   turret: {fileID: 7992170967498634279}
+  explosion: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
+  explosionPoint: {fileID: 4863920768913717723}
 --- !u!114 &-6650772125339501046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,6 +776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: {fileID: 5810266470597023128}
   explosionPoint: {fileID: 400002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
+  Owner: 
 --- !u!114 &2625940342614541598
 MonoBehaviour:
   m_ObjectHideFlags: 0
