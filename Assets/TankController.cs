@@ -26,9 +26,6 @@ public class TankController : NetworkBehaviour
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
 
-    [Tooltip("Acceleration and deceleration")]
-    public float SpeedChangeRate = 10.0f;
-
     public AudioClip LandingAudioClip;
     public AudioClip[] FootstepAudioClips;
     [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
@@ -39,7 +36,7 @@ public class TankController : NetworkBehaviour
 
     [Space(10)]
     [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-    public float JumpTimeout = 5.0f;
+    public float JumpTimeout = 3.0f;
 
     [Header("Player Grounded")]
     [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -92,7 +89,6 @@ public class TankController : NetworkBehaviour
 
     // player
     private float _speed;
-    private float _verticalVelocity;
 
     // rigidbody
     Rigidbody rb;
@@ -101,12 +97,11 @@ public class TankController : NetworkBehaviour
     private LobbyController _lobbyController;
 
     // jumping
-    private float _jumpTime = 0.0f;
     private float _lastJump = 0.0f;
 
     // dampening
     private float _rayDistance = 1.0f;
-    private float _fallDampening = 100000.0f;
+    private float _fallDampening = 25.0f;
     private float _lastHit = 0.0f;
 
     private void Awake()
@@ -133,6 +128,7 @@ public class TankController : NetworkBehaviour
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _input = GetComponent<StarterAssetsInputs>();
         _lobbyController = GameObject.FindGameObjectWithTag("LobbyController").GetComponent<LobbyController>();
+        _lastJump = JumpTimeout;
     }
 
     public override void OnNetworkSpawn()
@@ -160,8 +156,8 @@ public class TankController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            Move();
-            Jump();
+            //Move();
+            //Jump();
         }
     }
 
@@ -169,6 +165,8 @@ public class TankController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            Move();
+            Jump();
             Damp();
         }
     }
@@ -267,40 +265,19 @@ public class TankController : NetworkBehaviour
         // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is no input, set the target speed to 0
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-        // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(rb.velocity.x, 0.0f, rb.velocity.z).magnitude;
-
-        float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-
-        // accelerate or decelerate to target speed
-        if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-            currentHorizontalSpeed > targetSpeed + speedOffset)
-        {
-            // creates curved result rather than a linear one giving a more organic speed change
-            // note T in Lerp is clamped, so we don't need to clamp our speed
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                Time.deltaTime * SpeedChangeRate);
-
-            // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = targetSpeed;
-        }
+        
+        _speed = targetSpeed;
 
         // ratation of tank
         if (_input.move != Vector2.zero)
         {
             if (_input.move.x < 0)
             {
-                transform.Rotate(0f, -0.5f, 0);
+                transform.Rotate(0f, -1.0f, 0);
             }
             if (_input.move.x > 0)
             {
-                transform.Rotate(0f, +0.5f, 0);
+                transform.Rotate(0f, +1.0f, 0);
             }
         }
 
@@ -315,7 +292,7 @@ public class TankController : NetworkBehaviour
         }
 
         // move the player
-        rb.MovePosition(rb.position + (targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime));
+        rb.MovePosition(transform.position + (targetDirection.normalized * (_speed * Time.deltaTime)));
 
         // update wheel rotations based on tank movement
         if (_input.move.sqrMagnitude > 0.1)
@@ -346,24 +323,10 @@ public class TankController : NetworkBehaviour
 
     private void Jump()
     {
-        bool canJump = false;
-        if (Grounded && JumpTimeout - _lastJump <= 0)
+        if (_input.jump && Grounded && JumpTimeout - _lastJump <= 0)
         {
-            canJump = true;
-        }
-        if (_input.jump && Grounded && canJump)
-        {
-            _jumpTime = 0.0f;
             _lastJump = 0.0f;
-
-            //Vector3 jumpVelocity = Vector3.up.normalized * _speed;
-            Vector3 eulerRotation = rb.transform.eulerAngles;
-            Vector3 jumpDirection = Quaternion.Euler(eulerRotation.x, eulerRotation.y, eulerRotation.z) * Vector3.up * JumpHeight * 2.0f;
-            rb.velocity = jumpDirection;
-        }
-        if (!Grounded)
-        {
-            _jumpTime += Time.deltaTime;
+            rb.AddForce(transform.up * JumpHeight, ForceMode.VelocityChange);
         }
         _lastJump += Time.deltaTime;
     }
