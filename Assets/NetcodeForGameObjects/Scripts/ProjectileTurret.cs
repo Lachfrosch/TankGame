@@ -37,7 +37,7 @@ public class ProjectileTurret : NetworkBehaviour
     private StarterAssetsInputs _input;
 
     // recoil
-    private float _recoil = 10000.0f;
+    private float _recoil = 2.0f;
 
     // rigidbody
     private Rigidbody rb;
