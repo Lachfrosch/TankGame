@@ -71,7 +71,7 @@ public class PlayerHealth : NetworkBehaviour
         _health = 100;
         UpdateHealthHud();
         Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        PlayExplosionServerRpc(explosionPoint.position, Quaternion.identity);
+        PlayExplosion(explosionPoint.position, Quaternion.identity);
         transform.position = spawnpoint.position;
         transform.rotation = spawnpoint.rotation;
     }
@@ -88,19 +88,23 @@ public class PlayerHealth : NetworkBehaviour
         _lobbyController.AddPlayerDeath(target);
     }
 
-    [ServerRpc]
-    private void PlayExplosionServerRpc(Vector3 position, Quaternion rotation)
+    private void PlayExplosion(Vector3 position, Quaternion rotation)
     {
-        try
-        {
-            GameObject currentExplosion = Instantiate(explosion, position, rotation);
-            currentExplosion.transform.localScale = new Vector3(10, 10, 10);
-            currentExplosion.GetComponent<NetworkObject>().Spawn();
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e);
-        }
-        
+        GameObject currentExplosion = Instantiate(explosion, position, rotation);
+        currentExplosion.transform.localScale = new Vector3(10, 10, 10);
+        currentExplosion.GetComponent<NetworkObject>().Spawn();
+
+        //Invoke(nameof(DeleteObject), 1f);
     }
+
+    /*
+    private void DeleteObject()
+    {
+        if (IsServer)
+        {
+            gameObject.GetComponent<NetworkObject>().Despawn();
+            GameObject.Destroy(this.gameObject);
+        }
+    }
+    */
 }

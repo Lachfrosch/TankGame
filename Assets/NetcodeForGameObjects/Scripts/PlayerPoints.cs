@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerPoints : NetworkBehaviour
 {
+    /*
     private int _points;
     private int _kills;
     private int _deaths;
@@ -48,4 +49,5 @@ public class PlayerPoints : NetworkBehaviour
             _kills++;
         }
     }
+    */
 }
